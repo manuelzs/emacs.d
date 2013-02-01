@@ -32,6 +32,12 @@ Disables backup creation and auto saving."
 
   )
 
+;; Add pony mode
+(add-to-list 'load-path "~/.emacs.d/pony-mode/src/")
+(if (not (file-exists-p "~/.emacs.d/pony-mode/src/pony-mode.elc"))
+    (byte-compile-file "~/.emacs.d/pony-mode/src/pony-mode.el"))
+(require 'pony-mode)
+
 (add-to-list 'load-path "~/.emacs.d/ruby-mode/")
 ;; Load ruby mode when needed
 (autoload 'ruby-mode "ruby-mode" "Ruby mode" t )
