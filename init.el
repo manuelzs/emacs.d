@@ -50,4 +50,9 @@ Disables backup creation and auto saving."
 
 (put 'downcase-region 'disabled nil)
 
+;; html-mode for JSTs
 (add-to-list 'auto-mode-alist '("\\.jst" . html-mode))
+
+;; Adding IDO mode
+(require 'ido)
+(ido-mode t)
