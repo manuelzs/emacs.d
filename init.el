@@ -61,3 +61,15 @@ Disables backup creation and auto saving."
 ;; Scala mode
 (add-to-list 'load-path "~/.emacs.d/scala-mode/")
 (require 'scala-mode-auto)
+
+
+;; js2 mode
+(add-to-list 'load-path "~/.emacs.d/js2/")
+(if (not (file-exists-p "~/.emacs.d/js2/js2-mode.elc"))
+    (byte-compile-file "~/.emacs.d/js2/js2-mode.el"))
+
+(autoload 'js2-mode "js2-mode" nil t)
+
+(require 'js2-mode)
+
+(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
