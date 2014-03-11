@@ -72,4 +72,21 @@ Disables backup creation and auto saving."
 
 (require 'js2-mode)
 
-(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+;(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+
+(require 'zone)
+(zone-when-idle 60)
+
+
+
+(add-to-list 'load-path "~/.emacs.d/elpa/")
+(require 'package)
+(add-to-list 'package-archives
+  '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(add-to-list 'package-archives
+  '("marmalade" . "http://marmalade-repo.org/packages/") t)
+
+(when (< emacs-major-version 24)
+  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
+
+(package-initialize)
