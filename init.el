@@ -90,3 +90,6 @@ Disables backup creation and auto saving."
   (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
 
 (package-initialize)
+
+;; Show column
+(setq column-number-mode t)
