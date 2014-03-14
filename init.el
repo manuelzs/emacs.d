@@ -93,3 +93,7 @@ Disables backup creation and auto saving."
 
 ;; Show column
 (setq column-number-mode t)
+
+(add-to-list 'load-path "~/.emacs.d/less/")
+(require 'less-css-mode)
+(add-to-list 'auto-mode-alist '("\\.less" . less-css-mode))
