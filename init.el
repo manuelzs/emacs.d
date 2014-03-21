@@ -97,3 +97,6 @@ Disables backup creation and auto saving."
 (add-to-list 'load-path "~/.emacs.d/less/")
 (require 'less-css-mode)
 (add-to-list 'auto-mode-alist '("\\.less" . less-css-mode))
+
+;; Scroll one line - dont jump
+(setq scroll-step 1)
