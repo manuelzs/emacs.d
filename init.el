@@ -100,3 +100,9 @@ Disables backup creation and auto saving."
 
 ;; Scroll one line - dont jump
 (setq scroll-step 1)
+
+;; yaml-mode
+(add-to-list 'load-path "~/.emacs.d/")
+(require 'yaml-mode)
+;; Salt extensions
+(add-to-list 'auto-mode-alist '("\\.sls" . yaml-mode))
