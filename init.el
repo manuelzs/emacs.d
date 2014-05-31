@@ -19,6 +19,12 @@ Disables backup creation and auto saving."
 	(if auto-save-default
 	    (auto-save-mode -1)
 	  )
+
+	(custom-set-variables
+	 '(ido-enable-last-directory-history nil)
+	 '(ido-record-commands nil)
+	 '(ido-max-work-directory-list 0)
+	 '(ido-max-work-file-list 0))
 	)
     
     ;resort to default value of backup-inhibited
