@@ -1,3 +1,6 @@
 [submodule "pony-mode"]
 	path = pony-mode
 	url = git://github.com/davidmiller/pony-mode.git
+[submodule "yas"]
+	path = yas
+	url = git@github.com:AndreaCrotti/yasnippet-snippets.git

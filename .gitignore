@@ -3,3 +3,4 @@
 *.elc
 elpa/
 request/
+projectile-bookmarks.eld

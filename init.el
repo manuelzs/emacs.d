@@ -1,5 +1,10 @@
 (setq backup-directory-alist `(("." . "~/.emacs_backups")))
 
+; my-loadpackages.el
+; loading package
+(load "~/.emacs.d/my-packages.el")
+
+
 (define-minor-mode silent-mode
   "Silent mode
 Disables backup creation and auto saving."
@@ -10,7 +15,7 @@ Disables backup creation and auto saving."
   "[Silent]"
   ;; The minor mode bindings.
   nil
-  
+
   (if (symbol-value silent-mode)
       (progn
 	;; disable backups
@@ -26,10 +31,10 @@ Disables backup creation and auto saving."
 	 '(ido-max-work-directory-list 0)
 	 '(ido-max-work-file-list 0))
 	)
-    
+
     ;resort to default value of backup-inhibited
     (set 'backup-inhibited nil)
-					
+
     ;resort to default auto save setting
     (if auto-save-default
 	(auto-save-mode 1)
@@ -80,8 +85,9 @@ Disables backup creation and auto saving."
 
 ;(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 
-(require 'zone)
-(zone-when-idle 180)
+(when (not (daemonp))
+  (require 'zone)
+  (zone-when-idle 180))
 
 
 
@@ -115,15 +121,64 @@ Disables backup creation and auto saving."
 
 
 (custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  )
 (custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(font-lock-function-name-face ((((class color) (min-colors 88) (background light)) (:foreground "Blue2"))))
+ '(font-lock-string-face ((t (:foreground "color-128"))))
  '(minibuffer-prompt ((t (:foreground "Blue2")))))
+
+;; Python Tools
+;; (add-to-list 'load-path "~/.emacs.d/pytools/")
+
+;; (when (load "flymake" t)
+;;   (defun flymake-pylint-init ()
+;;     (let* ((temp-file (flymake-init-create-temp-buffer-copy
+;;                        'flymake-create-temp-inplace))
+;;            (local-file (file-relative-name
+;;                         temp-file
+;;                         (file-name-directory buffer-file-name))))
+;;       (list "~/.emacs.d/pytools/pyflymake.py" (list local-file))))
+
+;;   (add-to-list 'flymake-allowed-file-name-masks
+;;                '("\\.py\\'" flymake-pylint-init)))
+
+;; Activate flymake on file visit
+;;(add-hook 'find-file-hook 'flymake-find-file-hook)
+
+;;(defadvice flymake-post-syntax-check (before flymake-force-check-was-interrupted)
+;;    (setq flymake-check-was-interrupted t))
+;;(ad-activate 'flymake-post-syntax-check)
+
+;; Clean whitespace on save
+;;(add-hook 'before-save-hook 'whitespace-cleanup)
+;; This might add tabs instead of spaces
+
+;; Use spaces instead of tabs
+(setq-default indent-tabs-mode nil)
+
+;; Mustache mode
+(add-to-list 'load-path "~/.emacs.d/mustache/")
+(require 'mustache-mode)
+
+(projectile-global-mode)
+
+;; Guru mode with warnings only
+(guru-global-mode +1)
+(setq guru-warn-only t)
+
+(add-to-list 'yas/root-directory )
+(yas/initialize)
+
+;; Yasnippet
+(require 'yasnippet)
+(setq yas-snippet-dirs
+      '("~/.emacs.d/yas"))
+(yas-global-mode 1)
