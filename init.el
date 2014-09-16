@@ -96,6 +96,8 @@ Disables backup creation and auto saving."
 
 (package-initialize)
 
+(load "~/.emacs.d/my-packages.el")
+
 ;; Show column
 (setq column-number-mode t)
 
@@ -167,11 +169,11 @@ Disables backup creation and auto saving."
 (guru-global-mode +1)
 (setq guru-warn-only t)
 
-(add-to-list 'yas/root-directory )
-(yas/initialize)
-
 ;; Yasnippet
 (require 'yasnippet)
 (setq yas-snippet-dirs
       '("~/.emacs.d/yas"))
 (yas-global-mode 1)
+
+(require 'flx-ido)
+(flx-ido-mode 1)
