@@ -6,8 +6,6 @@
   '(
     auto-complete
     dash
-    ein
-    epl
     f
     flx
     flx-ido
@@ -16,19 +14,12 @@
     flymake-jshint
     flymake-json
     flymake-python-pyflakes
-    git
-    git-commit
-    git-commit-mode
-    git-rebase-mode
     gitty
     guru-mode
     magit
-    pkg-info
-    popup
     projectile
     request
     s
-    tabulated-list
     websocket
     yasnippet
     ) "a list of packages to ensure are installed at launch.")

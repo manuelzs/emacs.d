@@ -1,10 +1,5 @@
 (setq backup-directory-alist `(("." . "~/.emacs_backups")))
 
-; my-loadpackages.el
-; loading package
-(load "~/.emacs.d/my-packages.el")
-
-
 (define-minor-mode silent-mode
   "Silent mode
 Disables backup creation and auto saving."
@@ -95,8 +90,6 @@ Disables backup creation and auto saving."
 (require 'package)
 (add-to-list 'package-archives
   '("melpa" . "http://melpa.milkbox.net/packages/") t)
-(add-to-list 'package-archives
-  '("marmalade" . "http://marmalade-repo.org/packages/") t)
 
 (when (< emacs-major-version 24)
   (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
