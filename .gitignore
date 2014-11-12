@@ -4,3 +4,5 @@
 elpa/
 request/
 projectile-bookmarks.eld
+.python-environments/
+ac-comphist.dat
