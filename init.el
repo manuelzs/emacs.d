@@ -84,8 +84,6 @@ Disables backup creation and auto saving."
   (require 'zone)
   (zone-when-idle 180))
 
-
-
 (add-to-list 'load-path "~/.emacs.d/elpa/")
 (require 'package)
 (add-to-list 'package-archives
