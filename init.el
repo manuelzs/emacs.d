@@ -199,6 +199,7 @@ Disables backup creation and auto saving."
 (setq tern-command '("/usr/local/bin/tern"))
 
 ;; Auto complete mode
+(require 'auto-complete)
 (add-to-list 'ac-modes 'javascript-mode)
 (add-to-list 'ac-modes 'python-mode)
 (global-auto-complete-mode t)
