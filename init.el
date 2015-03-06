@@ -202,3 +202,8 @@ Disables backup creation and auto saving."
 (add-to-list 'ac-modes 'javascript-mode)
 (add-to-list 'ac-modes 'python-mode)
 (global-auto-complete-mode t)
+
+;; Load Flymake
+(require 'flymake-python-pyflakes)
+(add-hook 'python-mode-hook 'flymake-python-pyflakes-load)
+(setq flymake-python-pyflakes-executable "flake8")
