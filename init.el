@@ -1,4 +1,5 @@
 (setq backup-directory-alist `(("." . "~/.emacs_backups")))
+(setenv "PATH" (concat "/usr/local/bin:" (getenv "PATH")))
 
 (define-minor-mode silent-mode
   "Silent mode
@@ -84,7 +85,6 @@ Disables backup creation and auto saving."
   (require 'zone)
   (zone-when-idle 180))
 
-(add-to-list 'load-path "~/.emacs.d/elpa/")
 (require 'package)
 (add-to-list 'package-archives
   '("melpa" . "http://melpa.milkbox.net/packages/") t)
@@ -107,7 +107,7 @@ Disables backup creation and auto saving."
 (setq scroll-step 1)
 
 ;; yaml-mode
-(add-to-list 'load-path "~/.emacs.d/")
+(add-to-list 'load-path "~/.emacs.d/yaml/")
 (require 'yaml-mode)
 ;; Salt extensions
 (add-to-list 'auto-mode-alist '("\\.sls" . yaml-mode))
@@ -118,6 +118,10 @@ Disables backup creation and auto saving."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ido-enable-last-directory-history nil)
+ '(ido-max-work-directory-list 0)
+ '(ido-max-work-file-list 0)
+ '(ido-record-commands nil)
  '(python-shell-interpreter "ipython")
  '(send-mail-function (quote mailclient-send-it)))
 (custom-set-faces
@@ -131,7 +135,8 @@ Disables backup creation and auto saving."
  '(font-lock-string-face ((t (:foreground "color-128"))))
  '(highlight ((t (:background "color-235"))))
  '(minibuffer-prompt ((t (:foreground "Blue2"))))
- '(region ((t (:background "color-234")))))
+ '(region ((t (:background "color-234"))))
+ '(secondary-selection ((t (:background "color-130")))))
 
 ;; Python Tools
 ;; (add-to-list 'load-path "~/.emacs.d/pytools/")
@@ -184,3 +189,16 @@ Disables backup creation and auto saving."
 ;; Python autocomplete
 (add-hook 'python-mode-hook 'jedi:setup)
 (setq jedi:complete-on-dot t)
+
+;; JS Tern
+(add-hook 'js-mode-hook (lambda () (tern-mode t)))
+(eval-after-load 'tern
+  '(progn
+     (require 'tern-auto-complete)
+     (tern-ac-setup)))
+(setq tern-command '("/usr/local/bin/tern"))
+
+;; Auto complete mode
+(add-to-list 'ac-modes 'javascript-mode)
+(add-to-list 'ac-modes 'python-mode)
+(global-auto-complete-mode t)
