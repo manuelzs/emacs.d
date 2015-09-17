@@ -1,5 +1,10 @@
 (setq backup-directory-alist `(("." . "~/.emacs_backups")))
-(setenv "PATH" (concat "/usr/local/bin:" (getenv "PATH")))
+(when (memq window-system '(mac ns))
+  (exec-path-from-shell-initialize)
+  (exec-path-from-shell-copy-env "PATH")
+  (exec-path-from-shell-copy-env "GOPATH")
+  (add-to-list 'load-path (getenv "GOPATH")))
+
 
 (define-minor-mode silent-mode
   "Silent mode
@@ -69,17 +74,7 @@ Disables backup creation and auto saving."
 (add-to-list 'load-path "~/.emacs.d/scala-mode/")
 (require 'scala-mode-auto)
 
-
-;; js2 mode
-(add-to-list 'load-path "~/.emacs.d/js2/")
-(if (not (file-exists-p "~/.emacs.d/js2/js2-mode.elc"))
-    (byte-compile-file "~/.emacs.d/js2/js2-mode.el"))
-
-(autoload 'js2-mode "js2-mode" nil t)
-
-(require 'js2-mode)
-
-;(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+(add-to-list 'auto-mode-alist '("\\.json$" . js-mode))
 
 (when (not (daemonp))
   (require 'zone)
@@ -118,10 +113,19 @@ Disables backup creation and auto saving."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(coffee-tab-width 2)
+ '(custom-safe-themes
+   (quote
+    ("a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default)))
  '(ido-enable-last-directory-history nil)
  '(ido-max-work-directory-list 0)
  '(ido-max-work-file-list 0)
  '(ido-record-commands nil)
+ '(js2-basic-offset 4)
+ '(js2-bounce-indent-p t)
+ '(js2-cleanup-whitespace t)
+ '(js2-global-externs
+   (list "$" "window" "define" "require" "module" "exports" "mixpanel" "_" "process" "Buffer" "__dirname" "Parse" "sessionStorage" "localStorage" "describe" "it" "FileReader" "analytics"))
  '(python-shell-interpreter "ipython")
  '(send-mail-function (quote mailclient-send-it)))
 (custom-set-faces
@@ -131,7 +135,7 @@ Disables backup creation and auto saving."
  ;; If there is more than one, they won't work right.
  '(diff-added ((t (:inherit diff-changed :background "color-22"))))
  '(diff-removed ((t (:inherit diff-changed :background "color-88"))))
- '(font-lock-function-name-face ((((class color) (min-colors 88) (background light)) (:foreground "Blue2"))))
+ '(font-lock-function-name-face ((t (:foreground "color-33"))))
  '(font-lock-string-face ((t (:foreground "color-128"))))
  '(highlight ((t (:background "color-235"))))
  '(minibuffer-prompt ((t (:foreground "Blue2"))))
@@ -166,6 +170,7 @@ Disables backup creation and auto saving."
 
 ;; Use spaces instead of tabs
 (setq-default indent-tabs-mode nil)
+(setq tab-width 4)
 
 ;; Mustache mode
 (add-to-list 'load-path "~/.emacs.d/mustache/")
@@ -198,13 +203,53 @@ Disables backup creation and auto saving."
      (tern-ac-setup)))
 (setq tern-command '("/usr/local/bin/tern"))
 
+;; JS2
+(add-hook 'js-mode-hook 'js2-minor-mode)
+(add-hook 'js2-mode-hook 'ac-js2-mode)
+(setq js2-highlight-level 3)
+
+
 ;; Auto complete mode
 (require 'auto-complete)
 (add-to-list 'ac-modes 'javascript-mode)
 (add-to-list 'ac-modes 'python-mode)
+(add-to-list 'ac-modes 'coffee-mode)
 (global-auto-complete-mode t)
 
 ;; Load Flymake
 (require 'flymake-python-pyflakes)
 (add-hook 'python-mode-hook 'flymake-python-pyflakes-load)
 (setq flymake-python-pyflakes-executable "flake8")
+
+;; Coffee Options
+
+;; GO
+(require 'go-mode)
+(add-hook 'go-mode-hook
+          (lambda ()
+            (local-set-key (kbd "M-.") #'godef-jump)))
+
+(load-file "$GOPATH/src/golang.org/x/tools/cmd/oracle/oracle.el")
+
+(defun my-go-mode-hook ()
+  ;; Use goimports instead of go-fmt
+  (setq gofmt-command "goimports")
+  ;; Call Gofmt before saving
+  (add-hook 'before-save-hook 'gofmt-before-save)
+  ;; Customize compile command to run go build
+  (if (not (string-match "go" compile-command))
+      (set (make-local-variable 'compile-command)
+           "go generate && go build -v && go test -v && go vet"))
+  ;; Godef jump key binding
+  (local-set-key (kbd "M-.") 'godef-jump))
+(add-hook 'go-mode-hook 'my-go-mode-hook)
+
+(require 'go-autocomplete)
+(require 'auto-complete-config)
+(ac-config-default)
+
+;; Go Test
+(define-key go-mode-map (kbd "C-c t f") 'go-test-current-file)
+(define-key go-mode-map (kbd "C-c t t") 'go-test-current-test)
+(define-key go-mode-map (kbd "C-c t p") 'go-test-current-project)
+(define-key go-mode-map (kbd "C-c C-c") 'go-run)
