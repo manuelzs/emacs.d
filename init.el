@@ -1,9 +1,9 @@
-(setq backup-directory-alist `(("." . "~/.emacs_backups")))
-(when (memq window-system '(mac ns))
-  (exec-path-from-shell-initialize)
-  (exec-path-from-shell-copy-env "PATH")
-  (exec-path-from-shell-copy-env "GOPATH")
-  (add-to-list 'load-path (getenv "GOPATH")))
+;; (setq backup-directory-alist `(("." . "~/.emacs_backups")))
+;; (when (memq window-system '(mac ns))
+;;   (exec-path-from-shell-initialize)
+;;   (exec-path-from-shell-copy-env "PATH")
+;;   (exec-path-from-shell-copy-env "GOPATH")
+;;   (add-to-list 'load-path (getenv "GOPATH")))
 
 
 (define-minor-mode silent-mode
@@ -66,8 +66,12 @@ Disables backup creation and auto saving."
 (add-to-list 'auto-mode-alist '("\\.jst" . html-mode))
 
 ;; Adding IDO mode
+(add-to-list 'load-path "~/.emacs.d/elpa/ido-vertical-mode-20151003.1833/")
 (require 'ido)
+(require 'ido-vertical-mode)
 (ido-mode t)
+(ido-vertical-mode 1)
+(setq ido-vertical-define-keys 'C-n-and-C-p-only)
 
 
 ;; Scala mode
@@ -75,10 +79,6 @@ Disables backup creation and auto saving."
 (require 'scala-mode-auto)
 
 (add-to-list 'auto-mode-alist '("\\.json$" . js-mode))
-
-(when (not (daemonp))
-  (require 'zone)
-  (zone-when-idle 180))
 
 (require 'package)
 (add-to-list 'package-archives
@@ -125,7 +125,7 @@ Disables backup creation and auto saving."
  '(js2-bounce-indent-p t)
  '(js2-cleanup-whitespace t)
  '(js2-global-externs
-   (list "$" "window" "define" "require" "module" "exports" "mixpanel" "_" "process" "Buffer" "__dirname" "Parse" "sessionStorage" "localStorage" "describe" "it" "FileReader" "analytics"))
+   (list "window" "define" "require" "module" "exports" "process" "Buffer" "__dirname" "Parse" "sessionStorage" "localStorage" "describe" "it" "FileReader" "analytics" "setTimeout"))
  '(python-shell-interpreter "ipython")
  '(send-mail-function (quote mailclient-send-it)))
 (custom-set-faces
@@ -138,6 +138,12 @@ Disables backup creation and auto saving."
  '(font-lock-function-name-face ((t (:foreground "color-33"))))
  '(font-lock-string-face ((t (:foreground "color-128"))))
  '(highlight ((t (:background "color-235"))))
+ '(magit-diff-added ((t (:background "#222222" :foreground "#22aa22"))))
+ '(magit-diff-added-highlight ((t (:background "#111111" :foreground "#22aa22"))))
+ '(magit-diff-context-highlight ((t (:background "color-234" :foreground "color-245"))))
+ '(magit-diff-removed ((t (:background "#222222" :foreground "#cc2222"))))
+ '(magit-diff-removed-highlight ((t (:background "#111111" :foreground "#cc2222"))))
+ '(magit-section-highlight ((t (:background "color-234"))))
  '(minibuffer-prompt ((t (:foreground "Blue2"))))
  '(region ((t (:background "color-234"))))
  '(secondary-selection ((t (:background "color-130")))))
@@ -177,6 +183,9 @@ Disables backup creation and auto saving."
 (require 'mustache-mode)
 
 (projectile-global-mode)
+
+(load-file "~/.emacs.d/projectile-local.el")
+(projectile-bs-global-mode)
 
 ;; Guru mode with warnings only
 ;; (guru-global-mode +1)
@@ -229,7 +238,7 @@ Disables backup creation and auto saving."
           (lambda ()
             (local-set-key (kbd "M-.") #'godef-jump)))
 
-(load-file "$GOPATH/src/golang.org/x/tools/cmd/oracle/oracle.el")
+;; (load-file "$GOPATH/src/golang.org/x/tools/cmd/oracle/oracle.el")
 
 (defun my-go-mode-hook ()
   ;; Use goimports instead of go-fmt
@@ -253,3 +262,48 @@ Disables backup creation and auto saving."
 (define-key go-mode-map (kbd "C-c t t") 'go-test-current-test)
 (define-key go-mode-map (kbd "C-c t p") 'go-test-current-project)
 (define-key go-mode-map (kbd "C-c C-c") 'go-run)
+
+;; Enable mouse
+(xterm-mouse-mode 1)
+
+;; Clojure
+(setq cider-lein-command "/usr/local/bin/lein")
+(add-to-list 'auto-mode-alist '("\\.clj$" . clojure-mode))
+(add-hook 'clojure-mode-hook 'smartparens-strict-mode)
+
+(load-file "~/.emacs.d/elpa/spinner-1.7/spinner.el")
+(require 'clj-refactor)
+
+(defun my-clojure-mode-hook ()
+   (clj-refactor-mode 1)
+   (cljr-add-keybindings-with-prefix "C-c C-m"))
+
+;; (add-hook 'clojure-mode-hook #'my-clojure-mode-hook)
+
+;; Rainbow delimiters
+(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+
+;; Set fill column
+(setq-default fill-column 80)
+
+;; Copy region to clipboard
+(global-set-key
+ (kbd "C-c C-k")
+ (lambda ()
+   (interactive)
+   (if (eq system-type 'darwin)
+       (shell-command-on-region (point-min) (point-max) "pbcopy")
+     (message "Clipboard copy not supported"))))
+
+;; Jenkins
+(defun jenkins-start (token)
+    "Start jenkins with user token"
+    (interactive "sJenkins token: ")
+    (setq jenkins-api-token token)
+    (setq jenkins-url "http://cm.basestone.io:8080/")
+    (setq jenkins-username "manuel")
+    (jenkins))
+
+;; Magit GH pulls
+(require 'magit-gh-pulls)
+(add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls)
