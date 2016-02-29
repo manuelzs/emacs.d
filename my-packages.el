@@ -2,6 +2,7 @@
 ; defvar is the correct way to declare global variables
 ; you might see setq as well, but setq is supposed to be use just to set variables,
 ; not create them.
+
 (defvar required-packages
   '(
     auto-complete
@@ -15,14 +16,18 @@
     flymake-json
     flymake-python-pyflakes
     gitty
+    go-mode
+    go-autocomplete
     guru-mode
+    ido-vertical-mode
+    jedi
     magit
     projectile
+    rainbow-delimiters
     request
     s
     websocket
     yasnippet
-    jedi
     ) "a list of packages to ensure are installed at launch.")
 
 
