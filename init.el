@@ -1,7 +1,7 @@
-;; (setq backup-directory-alist `(("." . "~/.emacs_backups")))
-;; (when (memq window-system '(mac ns))
-;;   (exec-path-from-shell-initialize)
-;;   (exec-path-from-shell-copy-env "PATH")
+(setq backup-directory-alist `(("." . "~/.emacs_backups")))
+(when (memq window-system '(mac ns))
+  (exec-path-from-shell-initialize)
+  (exec-path-from-shell-copy-env "PATH"))
 ;;   (exec-path-from-shell-copy-env "GOPATH")
 ;;   (add-to-list 'load-path (getenv "GOPATH")))
 
@@ -66,7 +66,7 @@ Disables backup creation and auto saving."
 (add-to-list 'auto-mode-alist '("\\.jst" . html-mode))
 
 ;; Adding IDO mode
-(add-to-list 'load-path "~/.emacs.d/elpa/ido-vertical-mode-20151003.1833/")
+(add-to-list 'load-path "~/.emacs.d/elpa/ido-vertical-mode-20160429.1037/")
 (require 'ido)
 (require 'ido-vertical-mode)
 (ido-mode t)
@@ -116,7 +116,8 @@ Disables backup creation and auto saving."
  '(coffee-tab-width 2)
  '(custom-safe-themes
    (quote
-    ("a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default)))
+    ("a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default)))
+ '(default-input-method "TeX")
  '(ido-enable-last-directory-history nil)
  '(ido-max-work-directory-list 0)
  '(ido-max-work-file-list 0)
@@ -125,9 +126,15 @@ Disables backup creation and auto saving."
  '(js2-bounce-indent-p t)
  '(js2-cleanup-whitespace t)
  '(js2-global-externs
-   (list "window" "define" "require" "module" "exports" "process" "Buffer" "__dirname" "Parse" "sessionStorage" "localStorage" "describe" "it" "FileReader" "analytics" "setTimeout"))
+   (list "window" "define" "require" "module" "exports" "process" "Buffer" "__dirname" "Parse" "sessionStorage" "localStorage" "describe" "it" "FileReader" "analytics" "setTimeout" "btoa" "atob" "FormData"))
+ '(powerline-utf-8-separator-left 9622)
+ '(powerline-utf-8-separator-right 9623)
+ '(projectile-use-git-grep t)
  '(python-shell-interpreter "ipython")
- '(send-mail-function (quote mailclient-send-it)))
+ '(send-mail-function (quote mailclient-send-it))
+ '(split-height-threshold 100)
+ '(split-width-threshold 190)
+ '(webpack-server-host "0.0.0.0"))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -146,7 +153,10 @@ Disables backup creation and auto saving."
  '(magit-section-highlight ((t (:background "color-234"))))
  '(minibuffer-prompt ((t (:foreground "Blue2"))))
  '(region ((t (:background "color-234"))))
- '(secondary-selection ((t (:background "color-130")))))
+ '(secondary-selection ((t (:background "color-130"))))
+ '(smerge-markers ((t (:background "color-234"))))
+ '(smerge-mine ((t (:background "color-233"))))
+ '(smerge-other ((t (:background "color-233")))))
 
 ;; Python Tools
 ;; (add-to-list 'load-path "~/.emacs.d/pytools/")
@@ -271,14 +281,14 @@ Disables backup creation and auto saving."
 (add-to-list 'auto-mode-alist '("\\.clj$" . clojure-mode))
 (add-hook 'clojure-mode-hook 'smartparens-strict-mode)
 
-(load-file "~/.emacs.d/elpa/spinner-1.7/spinner.el")
+(load-file "~/.emacs.d/elpa/spinner-1.7.1/spinner.el")
 (require 'clj-refactor)
 
 (defun my-clojure-mode-hook ()
    (clj-refactor-mode 1)
    (cljr-add-keybindings-with-prefix "C-c C-m"))
 
-;; (add-hook 'clojure-mode-hook #'my-clojure-mode-hook)
+(add-hook 'clojure-mode-hook #'my-clojure-mode-hook)
 
 ;; Rainbow delimiters
 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
@@ -292,17 +302,23 @@ Disables backup creation and auto saving."
  (lambda ()
    (interactive)
    (if (eq system-type 'darwin)
-       (shell-command-on-region (point-min) (point-max) "pbcopy")
+       (shell-command-on-region (region-beginning) (region-end) "pbcopy")
      (message "Clipboard copy not supported"))))
 
 ;; Jenkins
-(defun jenkins-start (token)
-    "Start jenkins with user token"
-    (interactive "sJenkins token: ")
-    (setq jenkins-api-token token)
-    (setq jenkins-url "http://cm.basestone.io:8080/")
-    (setq jenkins-username "manuel")
-    (jenkins))
+(defun get-string-from-file (filePath)
+  "Return filePath's file content."
+  (with-temp-buffer
+    (insert-file-contents filePath)
+    (buffer-string)))
+
+(defun jenkins-start ()
+  "Start jenkins with user token"
+  (interactive)
+  (setq jenkins-api-token (get-string-from-file "~/.jenkins_token"))
+  (setq jenkins-url "http://cm.basestone.io:8080/")
+  (setq jenkins-username "manuel")
+  (jenkins))
 
 ;; Magit GH pulls
 (require 'magit-gh-pulls)
