@@ -126,11 +126,12 @@ Disables backup creation and auto saving."
  '(js2-bounce-indent-p t)
  '(js2-cleanup-whitespace t)
  '(js2-global-externs
-   (list "window" "define" "require" "module" "exports" "process" "Buffer" "__dirname" "Parse" "sessionStorage" "localStorage" "describe" "it" "FileReader" "analytics" "setTimeout" "btoa" "atob" "FormData"))
+   (list "window" "define" "require" "module" "exports" "process" "Buffer" "__dirname" "Parse" "sessionStorage" "localStorage" "describe" "it" "FileReader" "analytics" "setTimeout" "btoa" "atob" "FormData" "xdescribe" "xit" "context" "beforeEach"))
  '(powerline-utf-8-separator-left 9622)
  '(powerline-utf-8-separator-right 9623)
  '(projectile-use-git-grep t)
  '(python-shell-interpreter "ipython")
+ '(require-final-newline t)
  '(send-mail-function (quote mailclient-send-it))
  '(split-height-threshold 100)
  '(split-width-threshold 190)
@@ -281,6 +282,9 @@ Disables backup creation and auto saving."
 (add-to-list 'auto-mode-alist '("\\.clj$" . clojure-mode))
 (add-hook 'clojure-mode-hook 'smartparens-strict-mode)
 
+;; Hoplon
+(add-to-list 'auto-mode-alist '("\\.hl$" . clojure-mode))
+
 (load-file "~/.emacs.d/elpa/spinner-1.7.1/spinner.el")
 (require 'clj-refactor)
 
@@ -323,3 +327,23 @@ Disables backup creation and auto saving."
 ;; Magit GH pulls
 (require 'magit-gh-pulls)
 (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls)
+
+(load-file "~/.emacs.d/post_to_slack.el")
+
+;; Trackpad scroll
+(global-set-key (kbd "<mouse-5>") 'scroll-up-line)
+(global-set-key (kbd "<mouse-4>") 'scroll-down-line)
+
+
+
+
+(defun basestone-widget-switch-file ()
+  "BaseStone switch files"
+  (interactive)
+  (let ((other-file-name
+         (if (string-equal "index.js" (file-name-nondirectory buffer-file-name))
+             "template.mustache"
+           "index.js")))
+    (find-file-other-window (concat default-directory other-file-name))))
+
+(global-set-key (kbd "<f5>") 'basestone-widget-switch-file)
