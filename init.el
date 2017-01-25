@@ -1,7 +1,12 @@
 (setq backup-directory-alist `(("." . "~/.emacs_backups")))
-(when (memq window-system '(mac ns))
+
+(defun init-env-path ()
+  (interactive)
   (exec-path-from-shell-initialize)
   (exec-path-from-shell-copy-env "PATH"))
+
+(when (memq window-system '(mac ns))
+  (init-env-path))
 ;;   (exec-path-from-shell-copy-env "GOPATH")
 ;;   (add-to-list 'load-path (getenv "GOPATH")))
 
@@ -43,6 +48,9 @@ Disables backup creation and auto saving."
     )
 
   )
+
+;; Smpartparens for elisp mode
+(add-hook 'emacs-lisp-mode-hook 'smartparens-strict-mode)
 
 ;; Add pony mode
 (add-to-list 'load-path "~/.emacs.d/pony-mode/src/")
@@ -145,19 +153,27 @@ Disables backup creation and auto saving."
  '(diff-removed ((t (:inherit diff-changed :background "color-88"))))
  '(font-lock-function-name-face ((t (:foreground "color-33"))))
  '(font-lock-string-face ((t (:foreground "color-128"))))
+ '(font-lock-type-face ((t (:foreground "color-34"))))
+ '(font-lock-variable-name-face ((t (:foreground "color-39"))))
  '(highlight ((t (:background "color-235"))))
  '(magit-diff-added ((t (:background "#222222" :foreground "#22aa22"))))
  '(magit-diff-added-highlight ((t (:background "#111111" :foreground "#22aa22"))))
  '(magit-diff-context-highlight ((t (:background "color-234" :foreground "color-245"))))
  '(magit-diff-removed ((t (:background "#222222" :foreground "#cc2222"))))
  '(magit-diff-removed-highlight ((t (:background "#111111" :foreground "#cc2222"))))
+ '(magit-section-heading ((t (:foreground "color-208" :weight bold))))
  '(magit-section-highlight ((t (:background "color-234"))))
+ '(menu ((t (:background "color-235"))))
  '(minibuffer-prompt ((t (:foreground "Blue2"))))
+ '(mode-line ((t (:background "color-234" :foreground "color-249" :box (:line-width -1 :style released-button)))))
+ '(mode-line-buffer-id ((t (:foreground "color-197"))))
+ '(mode-line-inactive ((t (:inherit mode-line :background "color-233" :foreground "color-238" :box (:line-width -1 :color "grey75") :weight light))))
  '(region ((t (:background "color-234"))))
  '(secondary-selection ((t (:background "color-130"))))
  '(smerge-markers ((t (:background "color-234"))))
  '(smerge-mine ((t (:background "color-233"))))
- '(smerge-other ((t (:background "color-233")))))
+ '(smerge-other ((t (:background "color-233"))))
+ '(widget-field ((t (:background "color-235" :foreground "color-246")))))
 
 ;; Python Tools
 ;; (add-to-list 'load-path "~/.emacs.d/pytools/")
@@ -329,6 +345,7 @@ Disables backup creation and auto saving."
 (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls)
 
 (load-file "~/.emacs.d/post_to_slack.el")
+(slack-load-users-and-channels)
 
 ;; Trackpad scroll
 (global-set-key (kbd "<mouse-5>") 'scroll-up-line)
