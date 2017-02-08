@@ -50,7 +50,12 @@ Disables backup creation and auto saving."
   )
 
 ;; Smpartparens for elisp mode
+(require 'smartparens)
 (add-hook 'emacs-lisp-mode-hook 'smartparens-strict-mode)
+(define-key smartparens-mode-map (kbd "C-c C-s s") 'sp-forward-slurp-sexp)
+(define-key smartparens-mode-map (kbd "C-c C-s b") 'sp-forward-barf-sexp)
+(define-key smartparens-mode-map (kbd "C-c C-s k") 'sp-kill-sexp)
+(define-key smartparens-mode-map (kbd "C-c C-s c") 'sp-copy-sexp)
 
 ;; Add pony mode
 (add-to-list 'load-path "~/.emacs.d/pony-mode/src/")
