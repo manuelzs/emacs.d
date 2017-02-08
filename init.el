@@ -364,3 +364,21 @@ Disables backup creation and auto saving."
     (find-file-other-window (concat default-directory other-file-name))))
 
 (global-set-key (kbd "<f5>") 'basestone-widget-switch-file)
+
+
+;; Webpack
+(setq webpack-env-var "BASESTONE_TARGET")
+
+(defun webpack-list-targets ()
+  (let* (
+         (config-dir-path (concat (webpack-server-project-root) "config"))
+         (config-files (directory-files config-dir-path nil directory-files-no-dot-files-regexp)))
+    (message "LISTING TARGETS")
+    (mapcar 'file-name-sans-extension config-files)))
+
+(defun webpack-setup-env ()
+  (if (not (getenv webpack-env-var))
+      (setenv webpack-env-var (completing-read "Target: " (webpack-list-targets)))))
+
+(require 'webpack-server)
+(add-hook 'webpack-server-before-run-hook 'webpack-setup-env)
