@@ -126,11 +126,13 @@ Disables backup creation and auto saving."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(browse-url-browser-function (quote browse-url-default-macosx-browser))
  '(coffee-tab-width 2)
  '(custom-safe-themes
    (quote
     ("a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default)))
  '(default-input-method "TeX")
+ '(emms-player-vlc-command-name "/Applications/VLC.app/Contents/MacOS/VLC")
  '(ido-enable-last-directory-history nil)
  '(ido-max-work-directory-list 0)
  '(ido-max-work-file-list 0)
@@ -146,6 +148,7 @@ Disables backup creation and auto saving."
  '(python-shell-interpreter "ipython")
  '(require-final-newline t)
  '(send-mail-function (quote mailclient-send-it))
+ '(soundklaus-access-token (get-string-from-file "~/.soundcloud_token"))
  '(split-height-threshold 100)
  '(split-width-threshold 190)
  '(webpack-server-host "0.0.0.0"))
