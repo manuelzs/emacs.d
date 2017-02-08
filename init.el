@@ -322,13 +322,13 @@ Disables backup creation and auto saving."
 (setq-default fill-column 80)
 
 ;; Copy region to clipboard
-(global-set-key
- (kbd "C-c C-k")
- (lambda ()
-   (interactive)
-   (if (eq system-type 'darwin)
-       (shell-command-on-region (region-beginning) (region-end) "pbcopy")
-     (message "Clipboard copy not supported"))))
+(defun copy-region-to-clipboard ()
+  (interactive)
+  (if (eq system-type 'darwin)
+      (shell-command-on-region (region-beginning) (region-end) "pbcopy")
+    (message "Clipboard copy not supported")))
+
+(global-set-key (kbd "C-c C-k") 'copy-region-to-clipboard)
 
 ;; Jenkins
 (defun get-string-from-file (filePath)
