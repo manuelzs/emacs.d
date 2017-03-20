@@ -144,6 +144,7 @@ Disables backup creation and auto saving."
    (list "window" "define" "require" "module" "exports" "process" "Buffer" "__dirname" "Parse" "sessionStorage" "localStorage" "describe" "it" "FileReader" "analytics" "setTimeout" "btoa" "atob" "FormData" "xdescribe" "xit" "context" "beforeEach"))
  '(powerline-utf-8-separator-left 9622)
  '(powerline-utf-8-separator-right 9623)
+ '(projectile-switch-project-action (quote projectile-vc))
  '(projectile-use-git-grep t)
  '(python-shell-interpreter "ipython")
  '(require-final-newline t)
@@ -159,6 +160,12 @@ Disables backup creation and auto saving."
  ;; If there is more than one, they won't work right.
  '(diff-added ((t (:inherit diff-changed :background "color-22"))))
  '(diff-removed ((t (:inherit diff-changed :background "color-88"))))
+ '(ediff-current-diff-A ((t (:background "#5f0000"))))
+ '(ediff-current-diff-B ((t (:background "#005f00"))))
+ '(ediff-even-diff-A ((t (:background "color-233" :foreground "color-252"))))
+ '(ediff-even-diff-B ((t (:background "color-233" :foreground "White"))))
+ '(ediff-odd-diff-A ((t (:background "color-234" :foreground "White"))))
+ '(ediff-odd-diff-B ((t (:background "color-234" :foreground "color-252"))))
  '(font-lock-function-name-face ((t (:foreground "color-33"))))
  '(font-lock-string-face ((t (:foreground "color-128"))))
  '(font-lock-type-face ((t (:foreground "color-34"))))
@@ -381,12 +388,24 @@ Disables backup creation and auto saving."
   (let* (
          (config-dir-path (concat (webpack-server-project-root) "config"))
          (config-files (directory-files config-dir-path nil directory-files-no-dot-files-regexp)))
-    (message "LISTING TARGETS")
     (mapcar 'file-name-sans-extension config-files)))
 
 (defun webpack-setup-env ()
-  (if (not (getenv webpack-env-var))
-      (setenv webpack-env-var (completing-read "Target: " (webpack-list-targets)))))
+  (interactive)
+  (setenv webpack-env-var (completing-read "Target: " (webpack-list-targets))))
+
+(defun webpack-setup-env-if-empty ()
+    (if (not (getenv webpack-env-var)) (webpack-setup-env)))
 
 (require 'webpack-server)
-(add-hook 'webpack-server-before-run-hook 'webpack-setup-env)
+(add-hook 'webpack-server-before-start-hook 'webpack-setup-env-if-empty)
+
+
+(defun collapse-lines ()
+  (interactive)
+  (back-to-indentation)
+  (let ((beg (point)))
+    (end-of-line 0)
+    (delete-region beg (point))))
+
+(global-set-key (kbd "C-c C-w") 'collapse-lines)
