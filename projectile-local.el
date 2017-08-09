@@ -7,6 +7,7 @@
 (defvar projectile-bs-command-map
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "t") #'projectile-bs-go-to-template)
+    (define-key map (kbd "p") #'projectile-bs-switch-project)
     (define-key map (kbd "s") #'projectile-bs-go-to-stylesheet)
     (define-key map (kbd "v") #'projectile-bs-go-to-view)
     (define-key map (kbd "4 t") #'projectile-bs-go-to-template-other-window)
@@ -94,5 +95,51 @@
 (define-globalized-minor-mode projectile-bs-global-mode
   projectile-bs-mode
   projectile-bs-mode)
+
+
+
+
+(defun trim-string (string)
+  "Remove white spaces in beginning and ending of STRING.
+  White space here is any of: space, tab, emacs newline (line feed, ASCII 10)."
+  (replace-regexp-in-string "\\`[ \t\n]*" "" (replace-regexp-in-string "[ \t\n]*\\'" "" string)))
+
+
+(defun projectile-bs-get-string-from-file (filePath)
+  "Return filePath's file content."
+  (with-temp-buffer
+    (insert-file-contents filePath)
+    (trim-string (buffer-string))))
+
+(defun projectile-bs-get-project-name (project)
+  (let ((rc-file (concat project ".projectilerc")))
+    (if (and (not (file-remote-p rc-file)) (file-exists-p rc-file))
+        (concat "[" (projectile-bs-get-string-from-file rc-file) "] " project)
+      (concat "" project))))
+
+
+(defun projectile-bs-get-project-names (project-list)
+  (mapcar 'projectile-bs-get-project-name project-list))
+
+(defun projectile-bs-clean-project-name (project-name)
+  (replace-regexp-in-string "\\[.*] " "" project-name))
+
+
+(defun projectile-bs-switch-project (&optional arg)
+  "Switch to a project we have visited before.
+Invokes the command referenced by `projectile-switch-project-action' on switch.
+With a prefix ARG invokes `projectile-commander' instead of
+`projectile-switch-project-action.'"
+  (interactive "P")
+  (let* ((projects (projectile-relevant-known-projects))
+         (project-names (projectile-bs-get-project-names projects)))
+    (if projects
+        (projectile-completing-read
+         "Switch to project: " project-names
+         :action (lambda (project-name)
+                   (let ((project (projectile-bs-clean-project-name project-name)))
+                     (projectile-switch-project-by-name project arg))))
+      (user-error "There are no known projects"))))
+
 
 (provide 'projectile-bs)

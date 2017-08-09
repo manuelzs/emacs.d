@@ -49,7 +49,11 @@ Disables backup creation and auto saving."
 
   )
 
+(define-coding-system-alias 'UTF-8 'utf-8)
+
 ;; Smpartparens for elisp mode
+(add-to-list 'load-path "~/.emacs.d/elpa/dash-20170613.151/")
+(add-to-list 'load-path "~/.emacs.d/elpa/smartparens-20170606.725/")
 (require 'smartparens)
 (add-hook 'emacs-lisp-mode-hook 'smartparens-strict-mode)
 (define-key smartparens-mode-map (kbd "C-c C-s s") 'sp-forward-slurp-sexp)
@@ -91,7 +95,7 @@ Disables backup creation and auto saving."
 (add-to-list 'load-path "~/.emacs.d/scala-mode/")
 (require 'scala-mode-auto)
 
-(add-to-list 'auto-mode-alist '("\\.json$" . js-mode))
+;; (add-to-list 'auto-mode-alist '("\\.json$" . js-mode))
 
 (require 'package)
 (add-to-list 'package-archives
@@ -188,6 +192,7 @@ Disables backup creation and auto saving."
  '(smerge-markers ((t (:background "color-234"))))
  '(smerge-mine ((t (:background "color-233"))))
  '(smerge-other ((t (:background "color-233"))))
+ '(web-mode-html-tag-bracket-face ((t (:foreground "color-243"))))
  '(widget-field ((t (:background "color-235" :foreground "color-246")))))
 
 ;; Python Tools
@@ -247,22 +252,23 @@ Disables backup creation and auto saving."
 (setq jedi:complete-on-dot t)
 
 ;; JS Tern
-(add-hook 'js-mode-hook (lambda () (tern-mode t)))
-(eval-after-load 'tern
-  '(progn
-     (require 'tern-auto-complete)
-     (tern-ac-setup)))
-(setq tern-command '("/usr/local/bin/tern"))
+;; (add-hook 'js-mode-hook (lambda () (tern-mode t)))
+;; (eval-after-load 'tern
+;;   '(progn
+;;      (require 'tern-auto-complete)
+;;      (tern-ac-setup)))
+;; (setq tern-command '("/usr/local/bin/tern"))
 
 ;; JS2
-(add-hook 'js-mode-hook 'js2-minor-mode)
-(add-hook 'js2-mode-hook 'ac-js2-mode)
-(setq js2-highlight-level 3)
+;; (add-hook 'js-mode-hook 'js2-minor-mode)
+;; (add-hook 'js2-mode-hook 'ac-js2-mode)
+;; (setq js2-highlight-level 3)
 
 
 ;; Auto complete mode
 (require 'auto-complete)
 (add-to-list 'ac-modes 'javascript-mode)
+(add-to-list 'ac-modes 'web-mode)
 (add-to-list 'ac-modes 'python-mode)
 (add-to-list 'ac-modes 'coffee-mode)
 (global-auto-complete-mode t)
@@ -395,7 +401,10 @@ Disables backup creation and auto saving."
   (setenv webpack-env-var (completing-read "Target: " (webpack-list-targets))))
 
 (defun webpack-setup-env-if-empty ()
-    (if (not (getenv webpack-env-var)) (webpack-setup-env)))
+  (if (not (locate-file "node" exec-path exec-suffixes 1))
+      (init-env-path))
+  (if (not (getenv webpack-env-var)) (webpack-setup-env))
+  (message "Running with env %s" (getenv webpack-env-var)))
 
 (require 'webpack-server)
 (add-hook 'webpack-server-before-start-hook 'webpack-setup-env-if-empty)
@@ -409,3 +418,86 @@ Disables backup creation and auto saving."
     (delete-region beg (point))))
 
 (global-set-key (kbd "C-c C-w") 'collapse-lines)
+
+(require 'flycheck)
+;; (add-to-list 'js-mode-hook 'flycheck-mode)
+(setq-default flycheck-disabled-checkers '(javascript-jscs))
+
+;; Typescript
+(require 'typescript-mode)
+(add-to-list 'auto-mode-alist '("\\.tsx" . typescript-mode))
+(add-to-list 'auto-mode-alist '("\\.tsx" . typescript-mode))
+
+(defun setup-tide-mode ()
+  (interactive)
+  (tide-setup)
+  (flycheck-mode +1)
+  (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  (eldoc-mode +1)
+  (tide-hl-identifier-mode +1)
+  (company-mode +1))
+
+;; aligns annotation to the right hand side
+(setq company-tooltip-align-annotations t)
+
+;; formats the buffer before saving
+(add-hook 'before-save-hook 'tide-format-before-save)
+
+(add-hook 'typescript-mode-hook #'setup-tide-mode)
+
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.js$" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))
+
+(add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
+(add-hook 'web-mode-hook
+          (lambda ()
+            (when (string-equal "tsx" (file-name-extension buffer-file-name))
+              (setup-tide-mode))))
+
+(add-hook 'web-mode-hook
+          (lambda ()
+            (let ((ext (file-name-extension buffer-file-name)))
+              (when (or (string-equal "jsx" ext) (string-equal "js" ext))
+                (flycheck-mode)))))
+
+(setq web-mode-content-types-alist '(("jsx" . "\\.js[x]?\\'")))
+
+;; Flyckech
+(require 'flycheck)
+(flycheck-add-mode 'javascript-eslint 'web-mode)
+
+(require 'flycheck-flow)
+(flycheck-add-next-checker 'javascript-flow 'javascript-eslint)
+
+
+;; Restclient mode
+(add-to-list 'auto-mode-alist '("\\.rest" . restclient-mode))
+
+;; for better jsx syntax-highlighting in web-mode
+(defadvice web-mode-highlight-part (around tweak-jsx activate)
+  (if (equal web-mode-content-type "jsx")
+      (let ((web-mode-enable-part-face nil))
+        ad-do-it)
+    ad-do-it))
+
+
+
+(defun my/use-eslint-from-node-modules ()
+  (let* ((root (locate-dominating-file
+                (or (buffer-file-name) default-directory) "node_modules"))
+         (eslint (and root
+                      (expand-file-name "node_modules/eslint/bin/eslint.js" root))))
+    (when (and eslint (file-executable-p eslint))
+      (setq-local flycheck-javascript-eslint-executable eslint))))
+
+(defun my/use-flow-from-node-modules ()
+  (let* ((root (locate-dominating-file
+                (or (buffer-file-name) default-directory) "node_modules"))
+         (flow (and root
+                    (expand-file-name "node_modules/flow-bin/vendor/flow" root))))
+    (when (and flow (file-executable-p flow))
+      (setq-local flycheck-javascript-flow-executable flow))))
+
+(add-hook 'flycheck-mode-hook #'my/use-eslint-from-node-modules)
+(add-hook 'flycheck-mode-hook #'my/use-flow-from-node-modules)
