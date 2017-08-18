@@ -10,12 +10,6 @@
     f
     flx
     flx-ido
-    flymake
-    flymake-easy
-    flymake-jshint
-    flymake-json
-    flymake-python-pyflakes
-    gitty
     go-mode
     go-autocomplete
     guru-mode

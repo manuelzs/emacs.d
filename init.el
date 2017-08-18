@@ -52,8 +52,8 @@ Disables backup creation and auto saving."
 (define-coding-system-alias 'UTF-8 'utf-8)
 
 ;; Smpartparens for elisp mode
-(add-to-list 'load-path "~/.emacs.d/elpa/dash-20170613.151/")
-(add-to-list 'load-path "~/.emacs.d/elpa/smartparens-20170606.725/")
+(add-to-list 'load-path "~/.emacs.d/elpa/dash-20170727.212/")
+(add-to-list 'load-path "~/.emacs.d/elpa/smartparens-20170723.1205/")
 (require 'smartparens)
 (add-hook 'emacs-lisp-mode-hook 'smartparens-strict-mode)
 (define-key smartparens-mode-map (kbd "C-c C-s s") 'sp-forward-slurp-sexp)
@@ -106,7 +106,7 @@ Disables backup creation and auto saving."
 
 (package-initialize)
 
-(load "~/.emacs.d/my-packages.el")
+;;(load "~/.emacs.d/my-packages.el")
 
 ;; Show column
 (setq column-number-mode t)
@@ -146,6 +146,9 @@ Disables backup creation and auto saving."
  '(js2-cleanup-whitespace t)
  '(js2-global-externs
    (list "window" "define" "require" "module" "exports" "process" "Buffer" "__dirname" "Parse" "sessionStorage" "localStorage" "describe" "it" "FileReader" "analytics" "setTimeout" "btoa" "atob" "FormData" "xdescribe" "xit" "context" "beforeEach"))
+ '(package-selected-packages
+   (quote
+    (flycheck-flow typescript-mode flycheck web-mode exec-path-from-shell jenkins websocket smartparens request rainbow-delimiters projectile magit-gh-pulls jedi ido-vertical-mode go-mode go-autocomplete flymake-python-pyflakes flymake-json flymake-jshint flx-ido f clj-refactor)))
  '(powerline-utf-8-separator-left 9622)
  '(powerline-utf-8-separator-right 9623)
  '(projectile-switch-project-action (quote projectile-vc))
@@ -183,7 +186,7 @@ Disables backup creation and auto saving."
  '(magit-section-heading ((t (:foreground "color-208" :weight bold))))
  '(magit-section-highlight ((t (:background "color-234"))))
  '(menu ((t (:background "color-235"))))
- '(minibuffer-prompt ((t (:foreground "Blue2"))))
+ '(minibuffer-prompt ((t (:foreground "brightblue"))))
  '(mode-line ((t (:background "color-234" :foreground "color-249" :box (:line-width -1 :style released-button)))))
  '(mode-line-buffer-id ((t (:foreground "color-197"))))
  '(mode-line-inactive ((t (:inherit mode-line :background "color-233" :foreground "color-238" :box (:line-width -1 :color "grey75") :weight light))))
@@ -322,7 +325,7 @@ Disables backup creation and auto saving."
 ;; Hoplon
 (add-to-list 'auto-mode-alist '("\\.hl$" . clojure-mode))
 
-(load-file "~/.emacs.d/elpa/spinner-1.7.1/spinner.el")
+(load-file "~/.emacs.d/elpa/spinner-1.7.3/spinner.el")
 (require 'clj-refactor)
 
 (defun my-clojure-mode-hook ()
@@ -341,7 +344,9 @@ Disables backup creation and auto saving."
 (defun copy-region-to-clipboard ()
   (interactive)
   (if (eq system-type 'darwin)
-      (shell-command-on-region (region-beginning) (region-end) "pbcopy")
+      (shell-command-on-region
+       (region-beginning) (region-end)
+       "pbcopy && echo 'Region copied to clipboard'")
     (message "Clipboard copy not supported")))
 
 (global-set-key (kbd "C-c C-k") 'copy-region-to-clipboard)
@@ -388,6 +393,7 @@ Disables backup creation and auto saving."
 
 
 ;; Webpack
+(load-file "~/.emacs.d/webpack-server.el")
 (setq webpack-env-var "BASESTONE_TARGET")
 
 (defun webpack-list-targets ()
@@ -459,9 +465,15 @@ Disables backup creation and auto saving."
           (lambda ()
             (let ((ext (file-name-extension buffer-file-name)))
               (when (or (string-equal "jsx" ext) (string-equal "js" ext))
-                (flycheck-mode)))))
+                (flycheck-mode)
+                (yas-activate-extra-mode 'js-mode)))))
 
 (setq web-mode-content-types-alist '(("jsx" . "\\.js[x]?\\'")))
+
+(add-hook 'web-mode-hook
+          (lambda ()
+            (set (make-local-variable 'yas-extra-modes) 'js-mode)))
+(yas-reload-all 1)
 
 ;; Flyckech
 (require 'flycheck)
