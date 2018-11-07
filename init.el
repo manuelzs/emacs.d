@@ -5,11 +5,7 @@
   (exec-path-from-shell-initialize)
   (exec-path-from-shell-copy-env "PATH"))
 
-(when (memq window-system '(mac ns))
-  (init-env-path))
-;;   (exec-path-from-shell-copy-env "GOPATH")
-;;   (add-to-list 'load-path (getenv "GOPATH")))
-
+(when (memq window-system '(mac ns)) (init-env-path))
 
 (define-minor-mode silent-mode
   "Silent mode
@@ -295,7 +291,6 @@ Disables backup creation and auto saving."
           (lambda ()
             (local-set-key (kbd "M-.") #'godef-jump)))
 
-;; (load-file "$GOPATH/src/golang.org/x/tools/cmd/oracle/oracle.el")
 
 (defun my-go-mode-hook ()
   ;; Use goimports instead of go-fmt
