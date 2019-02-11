@@ -52,7 +52,7 @@ Disables backup creation and auto saving."
 (define-coding-system-alias 'UTF-8 'utf-8)
 
 ;; Smpartparens for elisp mode
-(add-to-list 'load-path "~/.emacs.d/elpa/dash-20170727.212/")
+(add-to-list 'load-path "~/.emacs.d/elpa/dash-20190128.1920/")
 (add-to-list 'load-path "~/.emacs.d/elpa/smartparens-20170723.1205/")
 (require 'smartparens)
 (add-hook 'emacs-lisp-mode-hook 'smartparens-strict-mode)
@@ -77,7 +77,7 @@ Disables backup creation and auto saving."
 (add-to-list 'auto-mode-alist '("\\.jst" . html-mode))
 
 ;; Adding IDO mode
-(add-to-list 'load-path "~/.emacs.d/elpa/ido-vertical-mode-20160429.1037/")
+(add-to-list 'load-path "~/.emacs.d/elpa/ido-vertical-mode-20180618.2101/")
 (require 'ido)
 (require 'ido-vertical-mode)
 (ido-mode t)
@@ -132,10 +132,7 @@ Disables backup creation and auto saving."
  '(coffee-tab-width 2)
  '(custom-safe-themes
    (quote
-    ("36ca8f60565af20ef4f30783aa16a26d96c02df7b4e54e9900a5138fb33808da"
-     "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e"
-     "a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0"
-     "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default)))
+    ("36ca8f60565af20ef4f30783aa16a26d96c02df7b4e54e9900a5138fb33808da" "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default)))
  '(default-input-method "TeX")
  '(emms-player-vlc-command-name "/Applications/VLC.app/Contents/MacOS/VLC")
  '(epa-pinentry-mode (quote loopback))
@@ -148,15 +145,10 @@ Disables backup creation and auto saving."
  '(js2-bounce-indent-p t)
  '(js2-cleanup-whitespace t)
  '(js2-global-externs
-   (list "window" "define" "require" "module"
-         "exports" "process" "Buffer" "__dirname"
-         "Parse" "sessionStorage" "localStorage"
-         "describe" "it" "FileReader" "analytics"
-         "setTimeout" "btoa" "atob" "FormData"
-         "xdescribe" "xit" "context" "beforeEach"))
+   (list "window" "define" "require" "module" "exports" "process" "Buffer" "__dirname" "Parse" "sessionStorage" "localStorage" "describe" "it" "FileReader" "analytics" "setTimeout" "btoa" "atob" "FormData" "xdescribe" "xit" "context" "beforeEach"))
  '(package-selected-packages
    (quote
-    (use-package docker terraform-mode groovy-mode company-go alect-themes afternoon-theme ample-zen-theme ample-theme wsd-mode tldr coffee-mode company tide uuidgen uuid markdown-mode tern-auto-complete tern js2-mode restclient flycheck-flow typescript-mode flycheck web-mode exec-path-from-shell jenkins websocket smartparens request rainbow-delimiters projectile magit-gh-pulls jedi ido-vertical-mode go-mode go-autocomplete flx-ido f clj-refactor)))
+    (nose pycoverage karma use-package docker terraform-mode groovy-mode company-go alect-themes afternoon-theme ample-zen-theme ample-theme wsd-mode tldr coffee-mode company tide uuidgen uuid markdown-mode tern-auto-complete tern js2-mode restclient flycheck-flow typescript-mode flycheck web-mode exec-path-from-shell jenkins websocket smartparens request rainbow-delimiters projectile magit-gh-pulls jedi ido-vertical-mode go-mode go-autocomplete flx-ido f clj-refactor)))
  '(powerline-utf-8-separator-left 9622)
  '(powerline-utf-8-separator-right 9623)
  '(projectile-switch-project-action (quote projectile-vc))
@@ -410,27 +402,27 @@ Disables backup creation and auto saving."
 
 
 ;; Webpack
-(load-file "~/.emacs.d/webpack-server.el")
-(setq webpack-env-var "BASESTONE_TARGET")
+;; (load-file "~/.emacs.d/webpack-server.el")
+;; (setq webpack-env-var "BASESTONE_TARGET")
 
-(defun webpack-list-targets ()
-  (let* (
-         (config-dir-path (concat (webpack-server-project-root) "config"))
-         (config-files (directory-files config-dir-path nil directory-files-no-dot-files-regexp)))
-    (mapcar 'file-name-sans-extension config-files)))
+;; (defun webpack-list-targets ()
+;;   (let* (
+;;          (config-dir-path (concat (webpack-server-project-root) "config"))
+;;          (config-files (directory-files config-dir-path nil directory-files-no-dot-files-regexp)))
+;;     (mapcar 'file-name-sans-extension config-files)))
 
-(defun webpack-setup-env ()
-  (interactive)
-  (setenv webpack-env-var (completing-read "Target: " (webpack-list-targets))))
+;; (defun webpack-setup-env ()
+;;   (interactive)
+;;   (setenv webpack-env-var (completing-read "Target: " (webpack-list-targets))))
 
-(defun webpack-setup-env-if-empty ()
-  (if (not (locate-file "node" exec-path exec-suffixes 1))
-      (init-env-path))
-  (if (not (getenv webpack-env-var)) (webpack-setup-env))
-  (message "Running with env %s" (getenv webpack-env-var)))
+;; (defun webpack-setup-env-if-empty ()
+;;   (if (not (locate-file "node" exec-path exec-suffixes 1))
+;;       (init-env-path))
+;;   (if (not (getenv webpack-env-var)) (webpack-setup-env))
+;;   (message "Running with env %s" (getenv webpack-env-var)))
 
-(require 'webpack-server)
-(add-hook 'webpack-server-before-start-hook 'webpack-setup-env-if-empty)
+;; (require 'webpack-server)
+;; (add-hook 'webpack-server-before-start-hook 'webpack-setup-env-if-empty)
 
 
 (defun collapse-lines ()
