@@ -5,6 +5,7 @@
 
 (defvar required-packages
   '(
+    use-package
     auto-complete
     dash
     f

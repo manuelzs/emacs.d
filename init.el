@@ -61,12 +61,6 @@ Disables backup creation and auto saving."
 (define-key smartparens-mode-map (kbd "C-c C-s k") 'sp-kill-sexp)
 (define-key smartparens-mode-map (kbd "C-c C-s c") 'sp-copy-sexp)
 
-;; Add pony mode
-(add-to-list 'load-path "~/.emacs.d/pony-mode/src/")
-(if (not (file-exists-p "~/.emacs.d/pony-mode/src/pony-mode.elc"))
-    (byte-compile-file "~/.emacs.d/pony-mode/src/pony-mode.el"))
-(require 'pony-mode)
-
 (add-to-list 'load-path "~/.emacs.d/ruby-mode/")
 ;; Load ruby mode when needed
 (autoload 'ruby-mode "ruby-mode" "Ruby mode" t )
@@ -130,13 +124,22 @@ Disables backup creation and auto saving."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ansi-color-faces-vector
+   [default bold shadow italic underline bold bold-italic bold])
+ '(ansi-color-names-vector
+   ["#212121" "#CC5542" "#6aaf50" "#7d7c61" "#5180b3" "#DC8CC3" "#9b55c3" "#bdbdb3"])
  '(browse-url-browser-function (quote browse-url-default-macosx-browser))
  '(coffee-tab-width 2)
  '(custom-safe-themes
    (quote
-    ("a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default)))
+    ("36ca8f60565af20ef4f30783aa16a26d96c02df7b4e54e9900a5138fb33808da"
+     "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e"
+     "a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0"
+     "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default)))
  '(default-input-method "TeX")
  '(emms-player-vlc-command-name "/Applications/VLC.app/Contents/MacOS/VLC")
+ '(epa-pinentry-mode (quote loopback))
+ '(fci-rule-color "#2e2e2e")
  '(ido-enable-last-directory-history nil)
  '(ido-max-work-directory-list 0)
  '(ido-max-work-file-list 0)
@@ -145,20 +148,50 @@ Disables backup creation and auto saving."
  '(js2-bounce-indent-p t)
  '(js2-cleanup-whitespace t)
  '(js2-global-externs
-   (list "window" "define" "require" "module" "exports" "process" "Buffer" "__dirname" "Parse" "sessionStorage" "localStorage" "describe" "it" "FileReader" "analytics" "setTimeout" "btoa" "atob" "FormData" "xdescribe" "xit" "context" "beforeEach"))
+   (list "window" "define" "require" "module"
+         "exports" "process" "Buffer" "__dirname"
+         "Parse" "sessionStorage" "localStorage"
+         "describe" "it" "FileReader" "analytics"
+         "setTimeout" "btoa" "atob" "FormData"
+         "xdescribe" "xit" "context" "beforeEach"))
  '(package-selected-packages
    (quote
-    (flycheck-flow typescript-mode flycheck web-mode exec-path-from-shell jenkins websocket smartparens request rainbow-delimiters projectile magit-gh-pulls jedi ido-vertical-mode go-mode go-autocomplete flymake-python-pyflakes flymake-json flymake-jshint flx-ido f clj-refactor)))
+    (use-package docker terraform-mode groovy-mode company-go alect-themes afternoon-theme ample-zen-theme ample-theme wsd-mode tldr coffee-mode company tide uuidgen uuid markdown-mode tern-auto-complete tern js2-mode restclient flycheck-flow typescript-mode flycheck web-mode exec-path-from-shell jenkins websocket smartparens request rainbow-delimiters projectile magit-gh-pulls jedi ido-vertical-mode go-mode go-autocomplete flx-ido f clj-refactor)))
  '(powerline-utf-8-separator-left 9622)
  '(powerline-utf-8-separator-right 9623)
  '(projectile-switch-project-action (quote projectile-vc))
  '(projectile-use-git-grep t)
  '(python-shell-interpreter "ipython")
+ '(python-shell-interpreter-args "--simple-prompt")
  '(require-final-newline t)
  '(send-mail-function (quote mailclient-send-it))
  '(soundklaus-access-token (get-string-from-file "~/.soundcloud_token"))
  '(split-height-threshold 100)
  '(split-width-threshold 190)
+ '(tab-width 4)
+ '(vc-annotate-background "#3b3b3b")
+ '(vc-annotate-color-map
+   (quote
+    ((20 . "#dd5542")
+     (40 . "#CC5542")
+     (60 . "#fb8512")
+     (80 . "#baba36")
+     (100 . "#bdbc61")
+     (120 . "#7d7c61")
+     (140 . "#6abd50")
+     (160 . "#6aaf50")
+     (180 . "#6aa350")
+     (200 . "#6a9550")
+     (220 . "#6a8550")
+     (240 . "#6a7550")
+     (260 . "#9b55c3")
+     (280 . "#6CA0A3")
+     (300 . "#528fd1")
+     (320 . "#5180b3")
+     (340 . "#6380b3")
+     (360 . "#DC8CC3"))))
+ '(vc-annotate-very-old-color "#DC8CC3")
+ '(web-mode-markup-indent-offset 2)
  '(webpack-server-host "0.0.0.0"))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -174,6 +207,7 @@ Disables backup creation and auto saving."
  '(ediff-odd-diff-A ((t (:background "color-234" :foreground "White"))))
  '(ediff-odd-diff-B ((t (:background "color-234" :foreground "color-252"))))
  '(font-lock-function-name-face ((t (:foreground "color-33"))))
+ '(font-lock-keyword-face ((t (:foreground "brightmagenta"))))
  '(font-lock-string-face ((t (:foreground "color-128"))))
  '(font-lock-type-face ((t (:foreground "color-34"))))
  '(font-lock-variable-name-face ((t (:foreground "color-39"))))
@@ -191,34 +225,16 @@ Disables backup creation and auto saving."
  '(mode-line-buffer-id ((t (:foreground "color-197"))))
  '(mode-line-inactive ((t (:inherit mode-line :background "color-233" :foreground "color-238" :box (:line-width -1 :color "grey75") :weight light))))
  '(region ((t (:background "color-234"))))
+ '(rst-level-1 ((t (:background "color-234"))))
+ '(rst-level-2 ((t (:background "color-234"))))
+ '(rst-level-3 ((t (:background "color-234"))))
  '(secondary-selection ((t (:background "color-130"))))
  '(smerge-markers ((t (:background "color-234"))))
- '(smerge-mine ((t (:background "color-233"))))
- '(smerge-other ((t (:background "color-233"))))
+ '(smerge-mine ((t (:background "color-233"))) t)
+ '(smerge-other ((t (:background "color-233"))) t)
+ '(smerge-refined-removed ((t (:inherit smerge-refined-change :background "color-52"))))
  '(web-mode-html-tag-bracket-face ((t (:foreground "color-243"))))
  '(widget-field ((t (:background "color-235" :foreground "color-246")))))
-
-;; Python Tools
-;; (add-to-list 'load-path "~/.emacs.d/pytools/")
-
-;; (when (load "flymake" t)
-;;   (defun flymake-pylint-init ()
-;;     (let* ((temp-file (flymake-init-create-temp-buffer-copy
-;;                        'flymake-create-temp-inplace))
-;;            (local-file (file-relative-name
-;;                         temp-file
-;;                         (file-name-directory buffer-file-name))))
-;;       (list "~/.emacs.d/pytools/pyflymake.py" (list local-file))))
-
-;;   (add-to-list 'flymake-allowed-file-name-masks
-;;                '("\\.py\\'" flymake-pylint-init)))
-
-;; Activate flymake on file visit
-;;(add-hook 'find-file-hook 'flymake-find-file-hook)
-
-;;(defadvice flymake-post-syntax-check (before flymake-force-check-was-interrupted)
-;;    (setq flymake-check-was-interrupted t))
-;;(ad-activate 'flymake-post-syntax-check)
 
 ;; Clean whitespace on save
 ;;(add-hook 'before-save-hook 'whitespace-cleanup)
@@ -233,6 +249,9 @@ Disables backup creation and auto saving."
 (require 'mustache-mode)
 
 (projectile-global-mode)
+(projectile-mode +1)
+(define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 
 (load-file "~/.emacs.d/projectile-local.el")
 (projectile-bs-global-mode)
@@ -276,11 +295,6 @@ Disables backup creation and auto saving."
 (add-to-list 'ac-modes 'coffee-mode)
 (global-auto-complete-mode t)
 
-;; Load Flymake
-(require 'flymake-python-pyflakes)
-(add-hook 'python-mode-hook 'flymake-python-pyflakes-load)
-(setq flymake-python-pyflakes-executable "flake8")
-
 ;; Coffee Options
 
 ;; GO
@@ -301,7 +315,10 @@ Disables backup creation and auto saving."
       (set (make-local-variable 'compile-command)
            "go generate && go build -v && go test -v && go vet"))
   ;; Godef jump key binding
-  (local-set-key (kbd "M-.") 'godef-jump))
+  (local-set-key (kbd "M-.") 'godef-jump)
+  ;; Use company mode
+  (set (make-local-variable 'company-backends) '(company-mode))
+  (company-mode))
 (add-hook 'go-mode-hook 'my-go-mode-hook)
 
 (require 'go-autocomplete)
@@ -326,13 +343,13 @@ Disables backup creation and auto saving."
 (add-to-list 'auto-mode-alist '("\\.hl$" . clojure-mode))
 
 (load-file "~/.emacs.d/elpa/spinner-1.7.3/spinner.el")
-(require 'clj-refactor)
+;; (require 'clj-refactor)
 
-(defun my-clojure-mode-hook ()
-   (clj-refactor-mode 1)
-   (cljr-add-keybindings-with-prefix "C-c C-m"))
+;; (defun my-clojure-mode-hook ()
+;;    (clj-refactor-mode 1)
+;;    (cljr-add-keybindings-with-prefix "C-c C-m"))
 
-(add-hook 'clojure-mode-hook #'my-clojure-mode-hook)
+;; (add-hook 'clojure-mode-hook #'my-clojure-mode-hook)
 
 ;; Rainbow delimiters
 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
@@ -427,11 +444,12 @@ Disables backup creation and auto saving."
 
 (require 'flycheck)
 ;; (add-to-list 'js-mode-hook 'flycheck-mode)
+(add-to-list 'python-mode-hook 'flycheck-mode)
 (setq-default flycheck-disabled-checkers '(javascript-jscs))
 
 ;; Typescript
 (require 'typescript-mode)
-(add-to-list 'auto-mode-alist '("\\.tsx" . typescript-mode))
+(add-to-list 'auto-mode-alist '("\\.ts" . typescript-mode))
 (add-to-list 'auto-mode-alist '("\\.tsx" . typescript-mode))
 
 (defun setup-tide-mode ()
@@ -470,17 +488,14 @@ Disables backup creation and auto saving."
 
 (setq web-mode-content-types-alist '(("jsx" . "\\.js[x]?\\'")))
 
-(add-hook 'web-mode-hook
-          (lambda ()
-            (set (make-local-variable 'yas-extra-modes) 'js-mode)))
+;; (add-hook 'web-mode-hook
+;;           (lambda ()
+;;             (set (make-local-variable 'yas-extra-modes) 'js-mode)))
 (yas-reload-all 1)
 
 ;; Flyckech
-(require 'flycheck)
 (flycheck-add-mode 'javascript-eslint 'web-mode)
-
-(require 'flycheck-flow)
-(flycheck-add-next-checker 'javascript-flow 'javascript-eslint)
+(flycheck-add-mode 'python-flake8 'python-mode)
 
 
 ;; Restclient mode
@@ -513,3 +528,8 @@ Disables backup creation and auto saving."
 
 (add-hook 'flycheck-mode-hook #'my/use-eslint-from-node-modules)
 (add-hook 'flycheck-mode-hook #'my/use-flow-from-node-modules)
+
+;; Docker mode
+(use-package docker
+  :ensure t
+  :bind ("C-c d" . docker))
