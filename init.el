@@ -124,6 +124,7 @@ Disables backup creation and auto saving."
    [default bold shadow italic underline bold bold-italic bold])
  '(ansi-color-names-vector
    ["#212121" "#CC5542" "#6aaf50" "#7d7c61" "#5180b3" "#DC8CC3" "#9b55c3" "#bdbdb3"])
+ '(ac-go-gocode-bin "/Users/manuel/go/bin/gocode")
  '(browse-url-browser-function (quote browse-url-default-macosx-browser))
  '(coffee-tab-width 2)
  '(custom-safe-themes
@@ -144,9 +145,109 @@ Disables backup creation and auto saving."
    (list "window" "define" "require" "module" "exports" "process" "Buffer" "__dirname" "Parse" "sessionStorage" "localStorage" "describe" "it" "FileReader" "analytics" "setTimeout" "btoa" "atob" "FormData" "xdescribe" "xit" "context" "beforeEach"))
  '(package-selected-packages
    (quote
-    (nose pycoverage karma use-package docker terraform-mode groovy-mode company-go alect-themes afternoon-theme ample-zen-theme ample-theme wsd-mode tldr coffee-mode company tide uuidgen uuid markdown-mode tern-auto-complete tern js2-mode restclient flycheck-flow typescript-mode flycheck web-mode exec-path-from-shell jenkins websocket smartparens request rainbow-delimiters projectile magit-gh-pulls jedi ido-vertical-mode go-mode go-autocomplete flx-ido f clj-refactor)))
+    (ac-js2
+     ack-and-a-half
+     afternoon-theme
+     alect-themes
+     ample-theme
+     ample-zen-theme
+     async
+     auto-complete
+     auto-package-update
+     butler
+     clj-refactor
+     clojure-mode
+     clojure-snippets
+     coffee-mode
+     color-theme
+     color-theme-sanityinc-solarized
+     color-theme-sanityinc-tomorrow
+     color-theme-solarized
+     company
+     company-go
+     concurrent
+     ctable
+     dash
+     deferred
+     direx
+     docker
+     ein
+     emms
+     emojify
+     exec-path-from-shell
+     f
+     feature-mode
+     fill-column-indicator
+     flx-ido
+     flycheck
+     flycheck-flow
+     flycheck-mypy
+     flycheck-package
+     flymake
+     flymake-jshint
+     flymake-json
+     flymake-python-pyflakes
+     fsm
+     gist
+     git
+     gitty
+     go-autocomplete
+     go-direx
+     go-dlv
+     go-mode
+     go-projectile
+     go-stacktracer
+     gotest
+     govet
+     groovy-mode
+     guru-mode
+     haskell-mode
+     ido-vertical-mode
+     jedi
+     jedi ido-vertical-mode
+     jenkins
+     json-mode
+     karma
+     magit-gh-pulls
+     markdown-mode
+     neotree
+     nose
+     pivotal-tracker
+     popwin
+     powerline
+     projectile
+     protobuf-mode
+     pycoverage
+     rainbow-delimiters
+     regex-tool
+     request
+     request-deferred
+     restclient
+     rich-minority
+     sass-mode
+     smartparens
+     solarized-theme
+     soundklaus
+     string-utils
+     tabulated-list
+     tern js2-mode
+     tern-auto-complete
+     terraform-mode
+     tide
+     tldr
+     twittering-mode
+     typescript-mode
+     use-package
+     uuid
+     uuidgen
+     web-beautify
+     web-mode
+     webpack-server
+     websocket
+     wsd-mode)))
  '(powerline-utf-8-separator-left 9622)
  '(powerline-utf-8-separator-right 9623)
+ '(projectile-keymap-prefix (kbd "C-c p"))
  '(projectile-switch-project-action (quote projectile-vc))
  '(projectile-use-git-grep t)
  '(python-shell-interpreter "ipython")
@@ -203,6 +304,7 @@ Disables backup creation and auto saving."
  '(magit-diff-added ((t (:background "#222222" :foreground "#22aa22"))))
  '(magit-diff-added-highlight ((t (:background "#111111" :foreground "#22aa22"))))
  '(magit-diff-context-highlight ((t (:background "color-234" :foreground "color-245"))))
+ '(magit-diff-hunk-heading ((t (:background "color-235" :foreground "color-251"))))
  '(magit-diff-removed ((t (:background "#222222" :foreground "#cc2222"))))
  '(magit-diff-removed-highlight ((t (:background "#111111" :foreground "#cc2222"))))
  '(magit-section-heading ((t (:foreground "color-208" :weight bold))))
@@ -217,10 +319,13 @@ Disables backup creation and auto saving."
  '(rst-level-2 ((t (:background "color-234"))))
  '(rst-level-3 ((t (:background "color-234"))))
  '(secondary-selection ((t (:background "color-130"))))
+ '(smerge-lower ((t (:background "color-232"))))
  '(smerge-markers ((t (:background "color-234"))))
  '(smerge-mine ((t (:background "color-233"))) t)
  '(smerge-other ((t (:background "color-233"))) t)
- '(smerge-refined-removed ((t (:inherit smerge-refined-change :background "color-52"))))
+ '(smerge-refined-added ((t (:inherit smerge-refined-change :background "color-235"))))
+ '(smerge-refined-removed ((t (:inherit smerge-refined-change :background "color-235"))))
+ '(smerge-upper ((t (:background "color-232"))))
  '(web-mode-html-tag-bracket-face ((t (:foreground "color-243"))))
  '(widget-field ((t (:background "color-235" :foreground "color-246")))))
 
@@ -251,7 +356,7 @@ Disables backup creation and auto saving."
 ;; Yasnippet
 (require 'yasnippet)
 (setq yas-snippet-dirs
-      '("~/.emacs.d/yas"))
+      '("~/.emacs.d/yas/snippets"))
 (yas-global-mode 1)
 
 (require 'flx-ido)
@@ -259,6 +364,7 @@ Disables backup creation and auto saving."
 
 ;; Python autocomplete
 (add-hook 'python-mode-hook 'jedi:setup)
+(add-hook 'python-mode-hook 'flycheck-mode)
 (setq jedi:complete-on-dot t)
 
 ;; JS Tern
@@ -329,7 +435,7 @@ Disables backup creation and auto saving."
 ;; Hoplon
 (add-to-list 'auto-mode-alist '("\\.hl$" . clojure-mode))
 
-(load-file "~/.emacs.d/elpa/spinner-1.7.3/spinner.el")
+;;(load-file "~/.emacs.d/elpa/spinner-1.7.1/spinner.el")
 ;; (require 'clj-refactor)
 
 ;; (defun my-clojure-mode-hook ()
