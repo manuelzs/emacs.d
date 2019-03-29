@@ -48,7 +48,7 @@ Disables backup creation and auto saving."
 (define-coding-system-alias 'UTF-8 'utf-8)
 
 ;; Smpartparens for elisp mode
-(add-to-list 'load-path "~/.emacs.d/elpa/dash-20190128.1920/")
+(add-to-list 'load-path "~/.emacs.d/elpa/dash-20190221.1029/")
 (add-to-list 'load-path "~/.emacs.d/elpa/smartparens-20170723.1205/")
 (require 'smartparens)
 (add-hook 'emacs-lisp-mode-hook 'smartparens-strict-mode)
@@ -131,6 +131,8 @@ Disables backup creation and auto saving."
    (quote
     ("36ca8f60565af20ef4f30783aa16a26d96c02df7b4e54e9900a5138fb33808da" "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default)))
  '(default-input-method "TeX")
+ '(ediff-split-window-function (quote split-window-horizontally))
+ '(elm-format-on-save t)
  '(emms-player-vlc-command-name "/Applications/VLC.app/Contents/MacOS/VLC")
  '(epa-pinentry-mode (quote loopback))
  '(fci-rule-color "#2e2e2e")
@@ -172,6 +174,7 @@ Disables backup creation and auto saving."
      direx
      docker
      ein
+     elm-mode
      emms
      emojify
      exec-path-from-shell
@@ -180,13 +183,11 @@ Disables backup creation and auto saving."
      fill-column-indicator
      flx-ido
      flycheck
+     flycheck-elm
      flycheck-flow
      flycheck-mypy
      flycheck-package
-     flymake
-     flymake-jshint
-     flymake-json
-     flymake-python-pyflakes
+     flycheck-rust
      fsm
      gist
      git
@@ -206,8 +207,11 @@ Disables backup creation and auto saving."
      jedi
      jedi ido-vertical-mode
      jenkins
+     js2-mode
      json-mode
      karma
+     lsp-mode
+     lsp-rust
      magit-gh-pulls
      markdown-mode
      neotree
@@ -224,13 +228,14 @@ Disables backup creation and auto saving."
      request-deferred
      restclient
      rich-minority
+     rust-mode
      sass-mode
      smartparens
      solarized-theme
      soundklaus
      string-utils
      tabulated-list
-     tern js2-mode
+     tern
      tern-auto-complete
      terraform-mode
      tide
@@ -289,10 +294,12 @@ Disables backup creation and auto saving."
  ;; If there is more than one, they won't work right.
  '(diff-added ((t (:inherit diff-changed :background "color-22"))))
  '(diff-removed ((t (:inherit diff-changed :background "color-88"))))
- '(ediff-current-diff-A ((t (:background "#5f0000"))))
- '(ediff-current-diff-B ((t (:background "#005f00"))))
+ '(ediff-current-diff-A ((t (:background "#1f0000"))))
+ '(ediff-current-diff-B ((t (:background "#002f00"))))
  '(ediff-even-diff-A ((t (:background "color-233" :foreground "color-252"))))
  '(ediff-even-diff-B ((t (:background "color-233" :foreground "White"))))
+ '(ediff-fine-diff-A ((t (:background "#995555"))))
+ '(ediff-fine-diff-B ((t (:background "#449944"))))
  '(ediff-odd-diff-A ((t (:background "color-234" :foreground "White"))))
  '(ediff-odd-diff-B ((t (:background "color-234" :foreground "color-252"))))
  '(font-lock-function-name-face ((t (:foreground "color-33"))))
@@ -324,8 +331,8 @@ Disables backup creation and auto saving."
  '(smerge-mine ((t (:background "color-233"))) t)
  '(smerge-other ((t (:background "color-233"))) t)
  '(smerge-refined-added ((t (:inherit smerge-refined-change :background "color-235"))))
- '(smerge-refined-removed ((t (:inherit smerge-refined-change :background "color-235"))))
- '(smerge-upper ((t (:background "color-232"))))
+ '(smerge-refined-removed ((t (:inherit smerge-refined-change :background "color-52"))))
+ '(smerge-upper ((t (:background "color-233"))))
  '(web-mode-html-tag-bracket-face ((t (:foreground "color-243"))))
  '(widget-field ((t (:background "color-235" :foreground "color-246")))))
 
