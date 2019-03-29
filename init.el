@@ -626,3 +626,18 @@ Disables backup creation and auto saving."
 (use-package docker
   :ensure t
   :bind ("C-c d" . docker))
+
+
+;; Elm
+(require 'elm-mode)
+(require 'company)
+(add-hook 'flycheck-mode-hook #'flycheck-elm-setup)
+(add-hook 'elm-mode-hook #'elm-oracle-setup-completion)
+
+(add-to-list 'company-backends 'company-elm)
+(add-to-list 'elm-mode-hook 'flycheck-mode)
+(add-to-list 'elm-mode-hook 'company-mode)
+
+
+;; Restart emacs server
+(load-file "~/.emacs.d//restart-server.el")
