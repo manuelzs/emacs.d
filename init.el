@@ -1,5 +1,8 @@
 (setq backup-directory-alist `(("." . "~/.emacs_backups")))
 
+;; Restart emacs server
+(load-file "~/.emacs.d//restart-server.el")
+
 (defun init-env-path ()
   (interactive)
   (exec-path-from-shell-initialize)
@@ -648,6 +651,3 @@ Disables backup creation and auto saving."
 (add-to-list 'elm-mode-hook 'flycheck-mode)
 (add-to-list 'elm-mode-hook 'company-mode)
 
-
-;; Restart emacs server
-(load-file "~/.emacs.d//restart-server.el")
