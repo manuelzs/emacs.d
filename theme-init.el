@@ -6,13 +6,16 @@
 
 ;; Load the theme (doom-one, doom-molokai, etc); keep in mind that each theme
 ;; may have their own settings.
-(load-theme 'doom-one t)
+;; (load-theme 'doom-one t)
 
 ;; Enable flashing mode-line on errors
 (doom-themes-visual-bell-config)
 
 ;; Corrects (and improves) org-mode's native fontification.
 (doom-themes-org-config)
+
+;; Set bg color to black
+(set-background-color "black")
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

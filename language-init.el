@@ -21,14 +21,16 @@
 ;; ;; (add-to-list 'js-mode-hook 'flycheck-mode)
 (setq-default flycheck-disabled-checkers '(javascript-jscs python-pylint))
 (flycheck-add-mode 'javascript-eslint 'web-mode)
+;; (flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append)
+;; (flycheck-add-next-checker 'javascript-eslint 'jsx-tide 'append)
 
 ;; Auto complete mode
 (require 'auto-complete)
-(add-to-list 'ac-modes 'javascript-mode)
-(add-to-list 'ac-modes 'web-mode)
+;; (add-to-list 'ac-modes 'javascript-mode)
+;; (add-to-list 'ac-modes 'web-mode)
 (add-to-list 'ac-modes 'python-mode)
 (add-to-list 'ac-modes 'coffee-mode)
-(global-auto-complete-mode t)
+;; (global-auto-complete-mode t)
 
 ;; Expand region
 (require 'expand-region)
@@ -37,7 +39,7 @@
 ;; PYTHON
 ;; Python autocomplete
 (flycheck-add-mode 'python-flake8 'python-mode)
-(add-hook 'python-mode-hook 'jedi:setup)
+;; (add-hook 'python-mode-hook 'jedi:setup)
 (add-hook 'python-mode-hook 'flycheck-mode)
 (setq jedi:complete-on-dot t)
 (add-hook 'python-mode-hook 'blacken-mode)
@@ -84,6 +86,7 @@
 (require 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.js$" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.vue$" . web-mode))
 
 (setq web-mode-content-types-alist '(("jsx" . "\\.js[x]?\\'")))
 
@@ -99,22 +102,23 @@
             (let ((ext (file-name-extension buffer-file-name)))
               (when (or (string-equal "jsx" ext) (string-equal "js" ext))
                 (flycheck-mode)
+                (setup-tide-mode)
                 (yas-activate-extra-mode 'js-mode)))))
 
-;; Prettier for web-mode
-(require 'prettier-js)
-(add-hook 'web-mode-hook 'prettier-js-mode)
+;; ;; Prettier for web-mode
+;; (require 'prettier-js)
+;; (defun web-mode-init-prettier-hook ()
+;;   (message "PRETTIER HOOK")
+;;   (add-node-modules-path)
+;;   (message "PRETTIER HOOK add node_modules")
+;;   (prettier-js-mode)
+;;   (message "PRETTIER HOOK DONE"))
+;; (add-hook 'web-mode-hook  'web-mode-init-prettier-hook)
 
 ;; Terraform (HCL)
 
 (require 'terraform-mode)
 (add-hook 'terraform-mode-hook 'terraform-format-on-save-mode)
-
-;; (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
-;; (add-hook 'web-mode-hook
-;;           (lambda ()
-;;             (when (string-equal "tsx" (file-name-extension buffer-file-name))
-;;               (setup-tide-mode))))
 
 ;; ;; (add-hook 'web-mode-hook
 ;; ;;           (lambda ()
@@ -144,38 +148,44 @@
 ;; ;; (add-hook 'js2-mode-hook 'ac-js2-mode)
 ;; ;; (setq js2-highlight-level 3)
 
-;; ;; GO
-;; (require 'go-mode)
-;; (add-hook 'go-mode-hook
-;;           (lambda ()
-;;             (local-set-key (kbd "M-.") #'godef-jump)))
+;; GO
+(require 'go-mode)
+(add-hook 'go-mode-hook
+          (lambda ()
+            (local-set-key (kbd "M-.") #'godef-jump-other-window)))
+
+(add-to-list 'load-path "/Users/manuel/go/src/golang.org/x/lint/misc/emacs/")
+(require 'golint)
 
 
-;; (defun my-go-mode-hook ()
-;;   ;; Use goimports instead of go-fmt
-;;   (setq gofmt-command "goimports")
-;;   ;; Call Gofmt before saving
-;;   (add-hook 'before-save-hook 'gofmt-before-save)
-;;   ;; Customize compile command to run go build
-;;   (if (not (string-match "go" compile-command))
-;;       (set (make-local-variable 'compile-command)
-;;            "go generate && go build -v && go test -v && go vet"))
-;;   ;; Godef jump key binding
-;;   (local-set-key (kbd "M-.") 'godef-jump)
-;;   ;; Use company mode
-;;   (set (make-local-variable 'company-backends) '(company-mode))
-;;   (company-mode))
-;; (add-hook 'go-mode-hook 'my-go-mode-hook)
+(defun my-go-mode-hook ()
+  ;; Use goimports instead of go-fmt
+  (setq gofmt-command "goimports")
 
-;; (require 'go-autocomplete)
-;; (require 'auto-complete-config)
-;; (ac-config-default)
+  ;; Call Gofmt before saving
+  (add-hook 'before-save-hook 'gofmt-before-save)
 
-;; ;; Go Test
-;; (define-key go-mode-map (kbd "C-c t f") 'go-test-current-file)
-;; (define-key go-mode-map (kbd "C-c t t") 'go-test-current-test)
-;; (define-key go-mode-map (kbd "C-c t p") 'go-test-current-project)
-;; (define-key go-mode-map (kbd "C-c C-c") 'go-run)
+  ;;   ;; Customize compile command to run go build
+  ;;   (if (not (string-match "go" compile-command))
+  ;;       (set (make-local-variable 'compile-command)
+  ;;            "go generate && go build -v && go test -v && go vet"))
+  ;;   ;; Godef jump key binding
+  ;;   (local-set-key (kbd "M-.") 'godef-jump)
+  ;;   ;; Use company mode
+  ;;   (set (make-local-variable 'company-backends) '(company-mode))
+  ;;   (company-mode)
+  )
+(add-hook 'go-mode-hook 'my-go-mode-hook)
+
+(require 'go-autocomplete)
+(require 'auto-complete-config)
+(ac-config-default)
+
+;; Go Test
+(define-key go-mode-map (kbd "C-c t f") 'go-test-current-file)
+(define-key go-mode-map (kbd "C-c t t") 'go-test-current-test)
+(define-key go-mode-map (kbd "C-c t p") 'go-test-current-project)
+(define-key go-mode-map (kbd "C-c C-c") 'go-run)
 
 ;; ;; Clojure
 ;; (setq cider-lein-command "/usr/local/bin/lein")
@@ -199,19 +209,41 @@
 ;; (add-to-list 'auto-mode-alist '("\\.ts" . typescript-mode))
 ;; (add-to-list 'auto-mode-alist '("\\.tsx" . typescript-mode))
 
-;; (defun setup-tide-mode ()
-;;   (interactive)
-;;   (tide-setup)
-;;   (flycheck-mode +1)
-;;   (setq flycheck-check-syntax-automatically '(save mode-enabled))
-;;   (eldoc-mode +1)
-;;   (tide-hl-identifier-mode +1)
-;;   (company-mode +1))
+;; TabNine
+(require 'company-tabnine)
 
-;; ;; aligns annotation to the right hand side
-;; (setq company-tooltip-align-annotations t)
+
+(defun setup-tide-mode ()
+  (interactive)
+  (tide-setup)
+  ;(flycheck-mode +1)
+  ;; (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  (eldoc-mode +1)
+  (tide-hl-identifier-mode +1)
+  (auto-complete-mode -1)
+  (company-mode +1)
+  (add-to-list 'company-backends #'company-tabnine))
+
+;; aligns annotation to the right hand side
+(setq company-tooltip-align-annotations t)
 
 ;; ;; formats the buffer before saving
-;; (add-hook 'before-save-hook 'tide-format-before-save)
+(add-hook 'before-save-hook 'tide-format-before-save)
 
-;; (add-hook 'typescript-mode-hook #'setup-tide-mode)
+;(add-hook 'typescript-mode-hook #'setup-tide-mode)
+
+(add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.ts\\'" . web-mode))
+(add-hook 'web-mode-hook
+           (lambda ()
+             (when (or (string-equal "tsx" (file-name-extension buffer-file-name))
+                       (string-equal "ts" (file-name-extension buffer-file-name)))
+               (yas-activate-extra-mode 'js-mode)
+               (setup-tide-mode))))
+
+
+;; (add-to-list 'auto-mode-alist '("\\.js[x]?\\'" . rome-mode))
+;; (add-to-list 'auto-mode-alist '("\\.ts[x]?\\'" . rome-mode))
+
+
+

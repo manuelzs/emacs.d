@@ -1,3 +1,15 @@
+(require 'auth-source)
+(setq magit-circleci-token
+      (funcall
+       (plist-get
+        (nth 0 (auth-source-search
+                :host "circleci.com/api"
+                :requires '(user secret)))
+        :secret)))
+
+;; (load-file "~/.emacs.d/post_to_slack.el")
+;; (slack-load-users-and-channels)
+
 ;; (load-file "~/.emacs.d/projectile-local.el")
 ;; (projectile-bs-global-mode)
 
@@ -8,9 +20,6 @@
 ;; ;; Magit GH pulls
 ;; (require 'magit-gh-pulls)
 ;; (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls)
-
-;; (load-file "~/.emacs.d/post_to_slack.el")
-;; (slack-load-users-and-channels)
 
 ;; (defun basestone-widget-switch-file ()
 ;;   "BaseStone switch files"

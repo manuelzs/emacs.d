@@ -40,16 +40,19 @@
   :group 'programming
   :prefix "post-to-slack-")
 
-(defcustom post-to-slack-token-file "~/.slack_api_token"
-  "Slack token file path"
-  :group 'post-to-slack
-  :type 'string)
-
-
 (defvar post-to-slack-user-list)
 (defvar post-to-slack-channel-list)
 (setq post-to-slack-user-list '())
 (setq post-to-slack-channel-list '())
+
+(setq post-to-slack-token
+      (funcall
+       (plist-get
+        (nth 0 (auth-source-search
+                :host "slack.com/api"
+                :requires '(user secret)))
+        :secret)))
+
 
 (defun post-to-slack-parse-users (response)
   (let* (
@@ -79,7 +82,7 @@
 (defun slack-load-users ()
   ""
   (let* (
-         (token (get-string-from-file post-to-slack-token-file))
+         (token post-to-slack-token)
          (url (concat "https://slack.com/api/users.list?token=" token))
          (url-request-method "GET"))
     (message url)
@@ -88,7 +91,7 @@
 (defun slack-load-channels ()
   ""
   (let* (
-         (token (get-string-from-file post-to-slack-token-file))
+         (token post-to-slack-token)
          (url (concat "https://slack.com/api/channels.list?token=" token))
          (url-request-method "GET"))
     (message url)
@@ -109,7 +112,7 @@
 (defun post-to-slack-channel (channel body)
   "Post body to slack channel"
   (let* (
-         (token (get-string-from-file post-to-slack-token-file))
+         (token post-to-slack-token)
          (real-channel (slack-get-real-channel channel))
          (url (concat
                "https://slack.com/api/chat.postMessage?token=" token
