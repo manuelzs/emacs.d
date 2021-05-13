@@ -6,7 +6,8 @@
     <string>gnu.emacs.daemon</string>
     <key>ProgramArguments</key>
     <array>
-      <string>/usr/local/Cellar/emacs/27.1/bin/emacs</string>
+      <string>/Applications/Emacs.app/Contents/MacOS/Emacs</string>
+      <string>-nw</string>
       <string>--daemon</string>
     </array>
     <key>KeepAlive</key>

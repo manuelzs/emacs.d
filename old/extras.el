@@ -1,18 +1,3 @@
-(require 'auth-source)
-(setq magit-circleci-token
-      (funcall
-       (plist-get
-        (nth 0 (auth-source-search
-                :host "circleci.com/api"
-                :requires '(user secret)))
-        :secret)))
-
-;; (load-file "~/.emacs.d/post_to_slack.el")
-;; (slack-load-users-and-channels)
-
-;; (load-file "~/.emacs.d/projectile-local.el")
-;; (projectile-bs-global-mode)
-
 ;; ;; Guru mode with warnings only
 ;; ;; (guru-global-mode +1)
 ;; ;; (setq guru-warn-only t)
