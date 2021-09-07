@@ -4,7 +4,8 @@
 (define-coding-system-alias 'UTF-8 'utf-8)
 (put 'downcase-region 'disabled nil)
 
-(unless () (server-start))
+(require 'server)
+(unless (server-running-p server-name) (server-start))
 
 (require 'package)
 (setq package-enable-at-startup nil)
@@ -21,6 +22,16 @@
 ;;  (require 'use-package))
 ;;(require 'diminish)
 ;;(require 'bind-key)
+
+;; Theme
+(use-package molokai-theme 
+  :ensure t
+  :load-path "themes"
+  :init
+  (setq molokai-theme-kit t)
+  :config
+  (load-theme 'molokai t))
+
 
 ;; Auth token example
 (use-package auth-source
@@ -141,7 +152,7 @@
 ;; Restclient mode
 (use-package restclient :ensure t)
 
-(use-package xterm-color)
+(use-package xterm-color :ensure t)
 
 (use-package editorconfig
   :ensure t
@@ -154,14 +165,22 @@
 
 ;; Use spaces instead of tabs
 (custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(column-number-mode t)
+ '(fill-column 80)
+ '(indent-tabs-mode nil)
+ '(package-selected-packages
+   '(xterm-color molokai-theme flycheck-mypy yasnippet-snippets yaml-mode web-mode use-package tide terraform-mode swift-mode smex smartparens sass-mode rust-mode restclient rainbow-delimiters pug-mode protobuf-mode projectile prettier-js powerline php-mode idomenu ido-vertical-mode haskell-mode groovy-mode graphviz-dot-mode graphql-mode gradle-mode forge flx-ido expand-region elm-mode editorconfig dockerfile-mode docker dart-mode company-web company-tabnine company-quickhelp clojure-mode browse-kill-ring blacken anzu add-node-modules-path))
+ '(prettier-js-command "/Users/manuel/.yarn/bin/prettier")
  '(require-final-newline t)
  '(scroll-step 1)
- '(indent-tabs-mode nil)
  '(split-height-threshold 100)
  '(split-width-threshold 190)
- '(column-number-mode t)
  '(tab-width 4)
- '(fill-column 80))
+ '(typescript-indent-level 2))
 
 
 ;; Enable mouse
@@ -177,3 +196,32 @@
 ;; Send to slack
 ;; (load-file "~/.emacs.d/post_to_slack.el")
 ;; (slack-load-users-and-channels)
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+
+
+;; Todo: check issues when loading as server
+;; (setq node-path "/Users/manuel/.nvm/versions/node/v14.17.0/bin")
+;; (unless (string-match-p (regexp-quote node-path) (getenv "PATH"))
+;;   (progn 
+;;     (setenv "PATH" (concat (getenv "PATH") ":" node-path))
+;;     (add-to-list 'exec-path 'node-path)))
+
+
+;; ;; Yasnippet
+;; ;; Todo: check issues when loading as server
+;; (use-package yasnippet
+;;   :ensure t
+;;   :init
+;;   (progn
+;;     (use-package yasnippet-snippets
+;;       :ensure t)
+;;     (yas-global-mode 1))
+;;   :config
+;;   (progn
+;;     (setq yas-snippet-dirs "~/.emacs.d/yas/snippets/")))
+

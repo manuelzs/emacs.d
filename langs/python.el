@@ -4,8 +4,9 @@
 
 ;;; Code:
 (use-package python
-  :custom ((python-shell-interpreter . "ipython")
-           (python-shell-interpreter-args . "--simple-prompt")))
+  :custom
+  (python-shell-interpreter "ipython")
+  (python-shell-interpreter-args "--simple-prompt"))
 
 (use-package blacken
   :ensure t
@@ -17,7 +18,6 @@
 ;; ;; (add-hook 'python-mode-hook 'jedi:setup)
 ;; (add-hook 'python-mode-hook 'flycheck-mode)
 ;; (setq jedi:complete-on-dot t)
-;; (add-hook 'python-mode-hook 'blacken-mode)
 
 ;; ;; Isort
 ;; ;; (add-hook 'before-save-hook 'py-isort-before-save)

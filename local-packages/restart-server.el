@@ -1,5 +1,5 @@
 (defconst SIGHUP 1)
-(defconst emacs-command "emacs-26.2")
+(defconst emacs-command "Emacs.app")
 
 (defun get-process-command (pid)
   (list pid (cdr (assq  'comm (process-attributes pid)))))

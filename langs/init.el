@@ -29,18 +29,6 @@
   ;;          (flycheck-python-pycompile-executable . "/Users/manuel/.virtualenvs/melt/bin/python3"))
   )
 
-;; Yasnippet
-(use-package yasnippet
-  :ensure t
-  :init
-  (progn
-    (use-package yasnippet-snippets
-      :ensure t)
-    (yas-global-mode 1))
-  :config
-  (progn
-    (setq yas-snippet-dirs "~/.emacs.d/yas/snippets/")))
-
 (load-file ' "~/.emacs.d/langs/web.el")
 (load-file ' "~/.emacs.d/langs/typescript.el")
 (load-file ' "~/.emacs.d/langs/python.el")
@@ -57,7 +45,12 @@
 (use-package elm-mode :ensure t)
 (use-package groovy-mode :ensure t)
 (use-package haskell-mode :ensure t)
-(use-package markdown-mode :ensure t)
+
+(use-package markdown-mode
+  :ensure t
+  :custom
+  (markdown-command "/opt/homebrew/bin/markdown" "Markdown binary location"))
+
 (use-package protobuf-mode :ensure t)
 (use-package rust-mode :ensure t)
 (use-package sass-mode :ensure t)
