@@ -173,7 +173,7 @@
  '(fill-column 80)
  '(indent-tabs-mode nil)
  '(package-selected-packages
-   '(xterm-color molokai-theme flycheck-mypy yasnippet-snippets yaml-mode web-mode use-package tide terraform-mode swift-mode smex smartparens sass-mode rust-mode restclient rainbow-delimiters pug-mode protobuf-mode projectile prettier-js powerline php-mode idomenu ido-vertical-mode haskell-mode groovy-mode graphviz-dot-mode graphql-mode gradle-mode forge flx-ido expand-region elm-mode editorconfig dockerfile-mode docker dart-mode company-web company-tabnine company-quickhelp clojure-mode browse-kill-ring blacken anzu add-node-modules-path))
+   '(go-mode xterm-color molokai-theme flycheck-mypy yasnippet-snippets yaml-mode web-mode use-package tide terraform-mode swift-mode smex smartparens sass-mode rust-mode restclient rainbow-delimiters pug-mode protobuf-mode projectile prettier-js powerline php-mode idomenu ido-vertical-mode haskell-mode groovy-mode graphviz-dot-mode graphql-mode gradle-mode forge flx-ido expand-region elm-mode editorconfig dockerfile-mode docker dart-mode company-web company-tabnine company-quickhelp clojure-mode browse-kill-ring blacken anzu add-node-modules-path))
  '(prettier-js-command "/Users/manuel/.yarn/bin/prettier")
  '(require-final-newline t)
  '(scroll-step 1)

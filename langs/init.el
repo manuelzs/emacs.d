@@ -32,6 +32,7 @@
 (load-file ' "~/.emacs.d/langs/web.el")
 (load-file ' "~/.emacs.d/langs/typescript.el")
 (load-file ' "~/.emacs.d/langs/python.el")
+(load-file ' "~/.emacs.d/langs/go.el")
 
 (use-package pug-mode :ensure t)
 (use-package gradle-mode :ensure t)
